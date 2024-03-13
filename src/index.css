@@ -1,0 +1,9 @@
+@use '~bootstrap/scss/bootstrap' as bootstrap;
+
+#root {
+    background-color: var(--bs-secondary-bg);
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+    overflow-y: auto;
+}
