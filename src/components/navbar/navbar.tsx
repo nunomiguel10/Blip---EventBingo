@@ -1,12 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React from 'react';
+import { Link } from 'react-router-dom';
 
-interface NavBarProps {
-    credits: number;
-}
-
-export const NavBar: React.FC<NavBarProps> = ({ credits }) => {
+export const NavBar = () => {
     return (
         <nav className="navbar sticky-top navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
@@ -27,17 +23,16 @@ export const NavBar: React.FC<NavBarProps> = ({ credits }) => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">
+                            <Link className="nav-link active" aria-current="page" to="/userPage">
                                 Página Inicial
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">
+                            <Link className="nav-link" to="/cardPage">
                                 Meus Cartões
-                            </a>
+                            </Link>
                         </li>
                     </ul>
-                    <div className="creditos">{credits} Créditos</div>
                 </div>
             </div>
         </nav>
