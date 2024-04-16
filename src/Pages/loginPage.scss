@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.butao_signin {
+    border-radius: 20px; 
+}
+
+.google-icon {
+    width: 1px;
+    height: 1px;
+    background-image: url('https://freesvg.org/img/1534129544.png');
+    background-size: cover;
+    margin-right: 10px;
+}

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { Card } from '../components/card/card';
 import { NavBar } from '../components/navbar/navbar';
 
+import './userPage.scss';
+
 interface UserInfo {
     id: number;
     name: string;
