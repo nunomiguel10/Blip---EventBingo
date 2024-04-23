@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 //import App from './App.tsx';
 import { LoginPage } from './Pages/loginPage.tsx';
+import { BingocardcreatePage } from './Pages/bingocardcreatePage.tsx';
 import { CardsPage } from './Pages/cardsPages.tsx';
 import { UserPage } from './Pages/userPage.tsx';
 import { App } from './App.tsx';
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: '/userPage',
                 element: <UserPage />
+            },
+            {
+                path: '/bingocardcreatePage',
+                element: <BingocardcreatePage />
             },
             {
                 path: '/cardPage',
