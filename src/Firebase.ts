@@ -9,6 +9,7 @@ import { getAuth } from 'firebase/auth';
 const firebaseConfig = {
     apiKey: 'AIzaSyCdUPHotgBOyfdm3oNdHTnvzUzh90TS7QQ',
     authDomain: 'blip-eventbingo.firebaseapp.com',
+    databaseURL: 'https://blip-eventbingo-default-rtdb.europe-west1.firebasedatabase.app/',
     projectId: 'blip-eventbingo',
     storageBucket: 'blip-eventbingo.appspot.com',
     messagingSenderId: '32407126196',

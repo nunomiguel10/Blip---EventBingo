@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-import { BingocardcreatePage } from './bingocardcreatePage';
+import { useNavigate } from 'react-router-dom';
 
 import { Card } from '../components/card/card';
 import { NavBar } from '../components/navbar/navbar';
@@ -16,6 +15,7 @@ interface UserInfo {
 
 export const UserPage = () => {
     const [users, setUsers] = useState<UserInfo[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/users')
@@ -24,7 +24,7 @@ export const UserPage = () => {
     }, []);
 
     const handleClick = () => {
-        return <BingocardcreatePage />;
+        navigate('/bingocardcreatepage');
     };
 
     return (
