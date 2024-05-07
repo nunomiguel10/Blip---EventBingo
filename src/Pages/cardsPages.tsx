@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { useEffect, useState } from 'react';
-import { DocumentData, collection, onSnapshot, query, where } from 'firebase/firestore';
+import { doc, DocumentData, collection, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
 
 import { NavBar } from '../components/navbar/navbar';
 import db from '../Firebase';
@@ -8,6 +8,10 @@ import db from '../Firebase';
 export const CardsPage = () => {
     const [bingoCards, setBingoCards] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [evento, setEvento] = useState('');
+    const [valor, setValor] = useState('');
+    const [data, setData] = useState('');
+    const [hora, setHora] = useState('');
 
     useEffect(() => {
         const colletionRef = collection(db, 'BingoCards');
@@ -17,6 +21,7 @@ export const CardsPage = () => {
         const unsub = onSnapshot(queryToDataBase, querySnapshot => {
             const items: DocumentData[] = [];
 
+            // eslint-disable-next-line @typescript-eslint/no-shadow
             querySnapshot.forEach(doc => {
                 items.push(doc.data());
             });
@@ -29,6 +34,24 @@ export const CardsPage = () => {
         };
     }, []);
 
+    const addBingoCard = async () => {
+        const newBingoCard = {
+            evento,
+            data,
+            valor,
+            createdAt: serverTimestamp(),
+            lastUpdate: serverTimestamp()
+        };
+
+        try {
+            const cardRef = doc(collection(db, 'BingoCards'));
+
+            await setDoc(cardRef, newBingoCard);
+        } catch (error) {
+            console.error('Erro ao adicionar o cartão bingo', error);
+        }
+    };
+
     return (
         <>
             <NavBar />
@@ -38,15 +61,25 @@ export const CardsPage = () => {
                 </div>
             )}
             {!isLoading && (
-                <ul className="list-group">
-                    {bingoCards.map(card => {
-                        return (
-                            <li key={card.evento} className="list-group-item">
-                                {card.evento}
-                            </li>
-                        );
-                    })}
-                </ul>
+                <div>
+                    <ul className="list-group">
+                        {bingoCards.map(card => {
+                            return (
+                                <li key={card.evento} className="list-group-item">
+                                    {card.evento}
+                                </li>
+                            );
+                        })}
+                    </ul>
+
+                    <form onSubmit={addBingoCard}>
+                        <input type="text" placeholder="Evento" value={evento} onChange={e => setEvento(e.target.value)} />
+                        <input type="text" placeholder="Valor" value={valor} onChange={e => setValor(e.target.value)} />
+                        <input type="date" placeholder="Data" value={data} onChange={e => setData(e.target.value)} />
+                        <input type="time" placeholder="Hora" value={hora} onChange={e => setHora(e.target.value)} />
+                        <button type="submit">Adicionar Cartão de Bingo</button>
+                    </form>
+                </div>
             )}
         </>
     );

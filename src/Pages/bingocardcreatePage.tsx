@@ -12,6 +12,7 @@ import { NavBar } from '../components/navbar/navbar';
 
 export const BingocardcreatePage = () => {
     // const [bingocard, setBingoCard] = useState<BingoCardInfo[]>([]);
+
     const navigate = useNavigate();
 
     const handleClickCreateBingo = () => {
