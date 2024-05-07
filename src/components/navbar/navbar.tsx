@@ -31,17 +31,17 @@ export const NavBar = () => {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/cardPage">
+                            <Link className="nav-link" to="/userPage">
                                 Ganhos
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/cardPage">
+                            <Link className="nav-link" to="/userPage">
                                 Encerrados
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/cardPage">
+                            <Link className="nav-link" to="/userPage">
                                 Adicionar Créditos
                             </Link>
                         </li>
