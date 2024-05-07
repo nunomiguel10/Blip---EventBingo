@@ -27,7 +27,11 @@ export const LoginPage = () => {
 
     return (
         <div className="container">
-            <div className="flex justify-center items-center h-screen">
+            <div className="login-content">
+                {/* Coloque seu logotipo aqui */}
+                <img src="src\components\images\logo.png" alt="Logo" className="logo" />
+
+                {/* Botão de login */}
                 <button onClick={handleGoogle} className="butao_signin">
                     <span className="google-icon"> </span>Sign In With Google
                 </button>
