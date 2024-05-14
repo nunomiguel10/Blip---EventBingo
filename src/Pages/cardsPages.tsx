@@ -12,13 +12,14 @@ export const CardsPage = () => {
     const [valor, setValor] = useState('');
     const [data, setData] = useState('');
     const [hora, setHora] = useState('');
+    const [isCreatingANewCard, setisCreatingANewCard] = useState(false);
 
     useEffect(() => {
         const colletionRef = collection(db, 'BingoCards');
-        const queryToDataBase = query(colletionRef, where('evento', '>=', 'Lakers'), where('evento', '<=', 'Lakers' + '\uf8ff'));
+        // const queryToDataBase = query(colletionRef, where('evento', '>=', 'Lakers'), where('evento', '<=', 'Lakers' + '\uf8ff'));
 
         setIsLoading(true);
-        const unsub = onSnapshot(queryToDataBase, querySnapshot => {
+        const unsub = onSnapshot(colletionRef, querySnapshot => {
             const items: DocumentData[] = [];
 
             // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -34,11 +35,13 @@ export const CardsPage = () => {
         };
     }, []);
 
-    const addBingoCard = async () => {
+    const addBingoCard = async event => {
+        event.preventDefault();
         const newBingoCard = {
             evento,
             data,
             valor,
+            hora,
             createdAt: serverTimestamp(),
             lastUpdate: serverTimestamp()
         };
@@ -46,10 +49,16 @@ export const CardsPage = () => {
         try {
             const cardRef = doc(collection(db, 'BingoCards'));
 
+            setisCreatingANewCard(true);
             await setDoc(cardRef, newBingoCard);
+            setEvento('');
+            setValor('');
+            setData('');
+            setHora('');
         } catch (error) {
             console.error('Erro ao adicionar o cartão bingo', error);
         }
+        setisCreatingANewCard(false);
     };
 
     return (
@@ -71,14 +80,20 @@ export const CardsPage = () => {
                             );
                         })}
                     </ul>
-
-                    <form onSubmit={addBingoCard}>
-                        <input type="text" placeholder="Evento" value={evento} onChange={e => setEvento(e.target.value)} />
-                        <input type="text" placeholder="Valor" value={valor} onChange={e => setValor(e.target.value)} />
-                        <input type="date" placeholder="Data" value={data} onChange={e => setData(e.target.value)} />
-                        <input type="time" placeholder="Hora" value={hora} onChange={e => setHora(e.target.value)} />
-                        <button type="submit">Adicionar Cartão de Bingo</button>
-                    </form>
+                    {!isCreatingANewCard && (
+                        <form onSubmit={addBingoCard}>
+                            <input type="text" placeholder="Evento" value={evento} onChange={e => setEvento(e.target.value)} />
+                            <input type="text" placeholder="Valor" value={valor} onChange={e => setValor(e.target.value)} />
+                            <input type="date" placeholder="Data" value={data} onChange={e => setData(e.target.value)} />
+                            <input type="time" placeholder="Hora" value={hora} onChange={e => setHora(e.target.value)} />
+                            <button type="submit">Adicionar Cartão de Bingo</button>
+                        </form>
+                    )}
+                    {isCreatingANewCard && (
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    )}
                 </div>
             )}
         </>
