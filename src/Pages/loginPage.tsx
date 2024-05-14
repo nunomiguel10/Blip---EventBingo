@@ -24,6 +24,9 @@ export const LoginPage = () => {
     if (isLoggedIn) {
         return <UserPage />;
     }
+    //else {
+    //     return <LoginPage />;
+    // }
 
     return (
         <div className="container">

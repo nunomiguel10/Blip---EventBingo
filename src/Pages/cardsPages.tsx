@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { useEffect, useState } from 'react';
-import { doc, DocumentData, collection, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
+import { doc, DocumentData, collection, onSnapshot, /*query*/ serverTimestamp, setDoc /*where*/ } from 'firebase/firestore';
 
 import { NavBar } from '../components/navbar/navbar';
 import db from '../Firebase';

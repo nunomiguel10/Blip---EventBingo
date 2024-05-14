@@ -1,0 +1,22 @@
+.row {
+    display: flex;
+    justify-content: space-between;
+    //margin-bottom: 10px;
+}
+
+.row input {
+    flex: 1;
+    //margin-right: 10px;
+}
+
+.button_create_card{
+    margin-top: 25px;
+}
+
+.card_value_createpage{
+    margin-top: 10px;
+    align-items: center;
+}
+// .row input:last-child {
+//     margin-right: 0;
+// }
