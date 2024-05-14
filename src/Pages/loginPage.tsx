@@ -32,7 +32,7 @@ export const LoginPage = () => {
         <div className="container">
             <div className="login-content">
                 {/* Coloque seu logotipo aqui */}
-                <img src="src\components\images\logo.png" alt="Logo" className="logo" />
+                <img src="images/logo.png" alt="Logo" className="logo" />
 
                 {/* Botão de login */}
                 <button onClick={handleGoogle} className="butao_signin">

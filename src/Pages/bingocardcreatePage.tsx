@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { doc, DocumentData, collection, onSnapshot, query, serverTimestamp, setDoc /*where*/ } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
+import { auth, db } from '../Firebase.ts';
 import { NavBar } from '../components/navbar/navbar';
-import db from '../Firebase';
 
 import './bingocardcreatePage.scss';
 // interface BingoCardInfo {
@@ -70,6 +70,7 @@ export const BingocardcreatePage = () => {
             evento9,
             //data,
             valor,
+            id_creator: auth.currentUser.uid,
             createdAt: serverTimestamp(),
             lastUpdate: serverTimestamp()
         };
