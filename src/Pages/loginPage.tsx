@@ -1,8 +1,10 @@
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useState } from 'react';
+import { doc, setDoc, getDoc /*where*/ } from 'firebase/firestore';
 
 import { UserPage } from './userPage.tsx';
 
+import db from '../Firebase';
 import { auth } from '../Firebase.ts';
 
 import './loginPage.scss';
@@ -14,10 +16,32 @@ export const LoginPage = () => {
         const provider = new GoogleAuthProvider();
 
         try {
-            await signInWithPopup(auth, provider);
-            setIsLoggedIn(true);
+            const result = await signInWithPopup(auth, provider);
+
+            if (result && result.user) {
+                const user = result.user;
+
+                // Referência ao documento do utilizador no Firestore
+                const userDocRef = doc(db, 'Utilizador', user.uid);
+
+                // Verifica se o documento do utilizador já existe
+                const userDoc = await getDoc(userDocRef);
+
+                if (!userDoc.exists()) {
+                    // Cria um novo documento para o utilizador
+                    await setDoc(userDocRef, {
+                        uid: user.uid,
+                        name: user.displayName,
+                        email: user.email,
+                        cartões: [],
+                        creditos: 50000
+                    });
+                }
+
+                setIsLoggedIn(true);
+            }
         } catch (error) {
-            console.error('Erro ao fazer login com o Google:', error);
+            console.error('Error signing in with Google:', error);
         }
     };
 

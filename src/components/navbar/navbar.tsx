@@ -1,6 +1,38 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { User, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+
+import db, { auth } from '../../Firebase';
+
+import './navbar.scss';
 
 export const NavBar = () => {
+    const [credits, setCredits] = useState(0);
+    const [name, setUserName] = useState('');
+
+    useEffect(() => {
+        const fetchUserData = async (user: User | null) => {
+            if (user) {
+                // Buscando créditos do usuário
+                const userDoc = await getDoc(doc(db, 'Utilizador', user.uid));
+
+                if (userDoc.exists()) {
+                    setCredits(userDoc.data().creditos);
+                }
+
+                // Buscando nome do usuário no Firebase Authentication
+                setUserName(user.displayName || ''); // Nome do usuário se disponível, senão vazio
+            }
+        };
+
+        const unsubscribe = onAuthStateChanged(auth, user => {
+            fetchUserData(user);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
     return (
         <nav className="navbar sticky-top navbar-expand-lg bg-body-tertiary justify-content-between">
             <div className="container-fluid">
@@ -40,16 +72,19 @@ export const NavBar = () => {
                                 Encerrados
                             </Link>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <Link className="nav-link" to="/userPage">
                                 Adicionar Créditos
                             </Link>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
                 <ul className="nav justify-content-center">
+                    <li className="nav-item" style={{ marginRight: '40px', fontSize: '20px' }}>
+                        <>Olá {name}!</>
+                    </li>
                     <li className="nav-item">
-                        <img src="images/carrinho.png" alt="" style={{ width: '35px', height: '30px' }} /> 1000 créditos
+                        <img src="images/carrinho.png" alt="" style={{ width: '35px', height: '30px' }} /> {credits}
                     </li>
                 </ul>
             </div>
