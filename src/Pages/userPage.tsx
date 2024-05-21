@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Card } from '../components/card/card';
@@ -6,22 +5,8 @@ import { NavBar } from '../components/navbar/navbar';
 
 import './userPage.scss';
 
-interface UserInfo {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-}
-
 export const UserPage = () => {
-    const [users, setUsers] = useState<UserInfo[]>([]);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(response => response.json())
-            .then(json => setUsers(json));
-    }, []);
 
     const handleClick = () => {
         navigate('/bingocardcreatepage');
@@ -37,9 +22,8 @@ export const UserPage = () => {
                     </button>
                 </div>
                 <div className="row justify-content-center">
-                    {users.map(user => (
-                        <Card key={user.id} name={user.name} email={user.email} />
-                    ))}
+                    {/* Renderizar apenas o componente Card */}
+                    <Card />
                 </div>
             </div>
         </>

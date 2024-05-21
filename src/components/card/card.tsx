@@ -1,22 +1,24 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from 'react';
+
+import { Bingo } from '../Bingo/Bingo';
 
 import './card.scss';
 
-interface CardProps {
-    name: string;
-    email: string;
-}
-
-export const Card = ({ name }: CardProps) => {
+export const Card = () => {
     return (
-        <div className="card card-spacing card-size text-center">
-            <img
-                src="https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg"
-                className="card-img-top"
-                alt="..."
-            />
-            <div className="card-body">
-                <h5 className="card-title">{name}</h5>
+        <div className="container-fluid">
+            <div className="row justify-content-center">
+                {[...Array(5)].map((_, index) => (
+                    <div key={index} className="col-lg-8 col-xl-6 mb-4">
+                        {' '}
+                        {/* Define o tamanho dos cartões e adiciona margem na parte inferior */}
+                        <div className="card card-spacing text-center">
+                            <div className="card-body">
+                                <Bingo />
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );
