@@ -17,6 +17,27 @@
     margin-top: 10px;
     align-items: center;
 }
-// .row input:last-child {
-//     margin-right: 0;
-// }
+
+.input-grid {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.input-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.input-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.input-grid-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.button_back_createcard{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

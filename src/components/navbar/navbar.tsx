@@ -34,7 +34,7 @@ export const NavBar = () => {
     }, []);
 
     return (
-        <nav className="navbar sticky-top navbar-expand-lg bg-body-tertiary justify-content-between">
+        <nav className="navbar sticky-top navbar-expand-lg bg-color">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/userPage">
                     <img src="images/logo.png" alt="EventBingo Logo" style={{ width: '120px', marginLeft: '10px' }} />

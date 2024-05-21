@@ -4,8 +4,7 @@ import { doc, setDoc, getDoc /*where*/ } from 'firebase/firestore';
 
 import { UserPage } from './userPage.tsx';
 
-import db from '../Firebase';
-import { auth } from '../Firebase.ts';
+import db, { auth } from '../Firebase.ts';
 
 import './loginPage.scss';
 
@@ -34,7 +33,8 @@ export const LoginPage = () => {
                         name: user.displayName,
                         email: user.email,
                         cartões: [],
-                        creditos: 50000
+                        creditos: 50000,
+                        role: 'Cliente'
                     });
                 }
 
@@ -53,7 +53,7 @@ export const LoginPage = () => {
     // }
 
     return (
-        <div className="container">
+        <div className="container_login">
             <div className="login-content">
                 {/* Coloque seu logotipo aqui */}
                 <img src="images/logo.png" alt="Logo" className="logo" />

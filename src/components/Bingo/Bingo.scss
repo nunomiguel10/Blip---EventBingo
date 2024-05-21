@@ -1,6 +1,6 @@
 .bingo-card {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
     grid-gap: 5px;
     background-color: #fff;
     padding: 10px;
@@ -9,14 +9,14 @@
 
 .bingo-row {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
 }
 
 .bingo-cell {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 10px; /* Adjust padding for responsiveness */
     border: 1px solid #000;
     background-color: #f0f0f0;
 }
