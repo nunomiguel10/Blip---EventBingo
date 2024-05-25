@@ -19,8 +19,8 @@ export const UserPage = () => {
     };
 
     useEffect(() => {
-        const colletionRef = collection(db, 'BingoCards');
-        const queryToDataBase = query(colletionRef);
+        const collectionRef = collection(db, 'BingoCards');
+        const queryToDataBase = query(collectionRef);
 
         setIsLoading(true);
         const unsub = onSnapshot(queryToDataBase, querySnapshot => {

@@ -4,16 +4,21 @@
     //margin-bottom: 10px;
 }
 
+.select_gridsize{
+    display: flex;
+    margin-top: 20px;
+}
+
 .row input {
     flex: 1;
     //margin-right: 10px;
 }
 
-.button_create_card{
+.button_create_card {
     margin-top: 25px;
 }
 
-.card_value_createpage{
+.card_value_createpage {
     margin-top: 10px;
     align-items: center;
 }
@@ -24,25 +29,30 @@
     margin-top: 20px;
 }
 
-.input-grid-3 {
+
+.input-grid-3-3 {
     grid-template-columns: repeat(3, 1fr);
 }
 
-.input-grid-4 {
+.input-grid-3-4 {
     grid-template-columns: repeat(4, 1fr);
 }
 
-.input-grid-5 {
-    grid-template-columns: repeat(5, 1fr);
+.input-grid-4-4 {
+    grid-template-columns: repeat(4, 1fr);
 }
 
-.button_back_createcard{
+.input-grid-4-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.button_back_createcard {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.card-value {
+.card-value-create {
     display: flex;
     justify-content: space-between;
     align-items: center;

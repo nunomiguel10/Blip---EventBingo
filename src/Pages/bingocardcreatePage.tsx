@@ -10,13 +10,13 @@ import './bingocardcreatePage.scss';
 
 export const BingocardcreatePage = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [bingoCards, setBingoCards] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [valor, setValor] = useState('');
-    const [isCreatingANewCard, setisCreatingANewCard] = useState(false);
-    const [gridSize, setGridSize] = useState(3); // Default to 3x3 grid
-    const [events, setEvents] = useState(Array(9).fill('')); // Default 9 empty events
-    const [results, setResults] = useState(Array(9).fill('')); // Default 9 empty events
+    const [bingoCards, setBingoCards] = useState<DocumentData[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [valor, setValor] = useState<string>('');
+    const [isCreatingANewCard, setIsCreatingANewCard] = useState<boolean>(false);
+    const [gridSize, setGridSize] = useState<{ rows: number; cols: number }>({ rows: 3, cols: 3 }); // Default to 3x3 grid
+    const [events, setEvents] = useState<string[]>(Array(9).fill('')); // Default 9 empty events
+    const [results, setResults] = useState<string[]>(Array(9).fill('')); // Default 9 empty results
 
     const navigate = useNavigate();
 
@@ -25,8 +25,8 @@ export const BingocardcreatePage = () => {
     };
 
     useEffect(() => {
-        const colletionRef = collection(db, 'BingoCards');
-        const queryToDataBase = query(colletionRef);
+        const collectionRef = collection(db, 'BingoCards');
+        const queryToDataBase = query(collectionRef);
 
         setIsLoading(true);
         const unsub = onSnapshot(queryToDataBase, querySnapshot => {
@@ -40,39 +40,43 @@ export const BingocardcreatePage = () => {
             setIsLoading(false);
         });
 
-        return () => {
-            unsub();
-        };
+        return () => unsub();
     }, []);
 
-    const handleGridSizeChange = size => {
-        setGridSize(size);
-        setEvents(Array(size * size).fill(''));
-        setResults(Array(size * size).fill(''));
+    const handleGridSizeChange = (rows: number, cols: number) => {
+        setGridSize({ rows, cols });
+        setEvents(Array(rows * cols).fill(''));
+        setResults(Array(rows * cols).fill(''));
     };
 
-    const handleEventChange = (index, value) => {
-        const newEvents = [...events];
+    const handleEventChange = (index: number, value: string) => {
+        setEvents(prevEvents => {
+            const newEvents = [...prevEvents];
 
-        newEvents[index] = value;
-        setEvents(newEvents);
+            newEvents[index] = value;
+
+            return newEvents;
+        });
     };
 
-    const handleResultChange = (index, value) => {
-        const newResults = [...results];
+    const handleResultChange = (index: number, value: string) => {
+        setResults(prevResults => {
+            const newResults = [...prevResults];
 
-        newResults[index] = value;
-        setResults(newResults);
+            newResults[index] = value;
+
+            return newResults;
+        });
     };
 
-    const addBingoCard = async event => {
+    const addBingoCard = async (event: React.FormEvent) => {
         event.preventDefault();
         const newBingoCard = {
             valor,
             events,
             gridSize,
             results,
-            id_creator: auth.currentUser.uid,
+            id_creator: auth.currentUser?.uid,
             createdAt: serverTimestamp(),
             lastUpdate: serverTimestamp()
         };
@@ -80,26 +84,24 @@ export const BingocardcreatePage = () => {
         try {
             const cardRef = doc(collection(db, 'BingoCards'));
 
-            setisCreatingANewCard(true);
+            setIsCreatingANewCard(true);
             await setDoc(cardRef, newBingoCard);
             setValor('');
-            setEvents(Array(gridSize * gridSize).fill(''));
-            setResults(Array(gridSize * gridSize).fill(''));
+            setEvents(Array(gridSize.rows * gridSize.cols).fill(''));
+            setResults(Array(gridSize.rows * gridSize.cols).fill(''));
         } catch (error) {
             console.error('Erro ao adicionar o cartão bingo', error);
         }
-        setisCreatingANewCard(false);
+        setIsCreatingANewCard(false);
     };
 
-    const getInputGridClass = () => {
-        return `input-grid input-grid-${gridSize}`;
-    };
+    const getInputGridClass = () => `input-grid input-grid-${gridSize.rows}-${gridSize.cols}`;
 
     return (
         <>
             <NavBar />
             {isLoading && (
-                <div className="spinner-border" role="status">
+                <div className="spinner-border" role="status" aria-label="Loading...">
                     <span className="visually-hidden">Loading...</span>
                 </div>
             )}
@@ -108,13 +110,20 @@ export const BingocardcreatePage = () => {
                     {!isCreatingANewCard && (
                         <form onSubmit={addBingoCard}>
                             <div className="row">
-                                <select onChange={e => handleGridSizeChange(parseInt(e.target.value))}>
-                                    <option value="3">3x3</option>
-                                    <option value="4">4x4</option>
-                                    <option value="5">5x5</option>
+                                <select
+                                    onChange={e => {
+                                        const [rows, cols] = e.target.value.split('x').map(Number);
+
+                                        handleGridSizeChange(rows, cols);
+                                    }}
+                                >
+                                    <option value="3x3">3x3</option>
+                                    <option value="3x4">3x4</option>
+                                    <option value="4x4">4x4</option>
+                                    <option value="4x3">4x3</option>
                                 </select>
                             </div>
-                            <div className="card-value">
+                            <div className="card-value-create">
                                 <input type="text" placeholder="Valor" value={valor} onChange={e => setValor(e.target.value)} />
                             </div>
                             <div className={getInputGridClass()}>
@@ -141,8 +150,8 @@ export const BingocardcreatePage = () => {
                         </form>
                     )}
                     {isCreatingANewCard && (
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
+                        <div className="spinner-border" role="status" aria-label="Creating bingo card...">
+                            <span className="visually-hidden">Creating bingo card...</span>
                         </div>
                     )}
                 </div>

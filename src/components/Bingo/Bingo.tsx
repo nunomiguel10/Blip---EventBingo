@@ -4,15 +4,15 @@
 
 import './Bingo.scss';
 
-const generateBingoCard = (events, results, gridSize) => {
+const generateBingoCard = (events, results, rows, cols) => {
     const card = [];
     let eventIndex = 0;
     let resultIndex = 0;
 
-    for (let i = 0; i < gridSize; i++) {
+    for (let i = 0; i < rows; i++) {
         const row = [];
 
-        for (let j = 0; j < gridSize; j++) {
+        for (let j = 0; j < cols; j++) {
             row.push({ event: events[eventIndex] || '', result: results[resultIndex] || '' });
             eventIndex++;
             resultIndex++;
@@ -23,9 +23,9 @@ const generateBingoCard = (events, results, gridSize) => {
     return card;
 };
 
-// eslint-disable-next-line react/prop-types
-export const Bingo = ({ events = [], results = [], gridSize = 3 }) => {
-    const card = generateBingoCard(events, results, gridSize);
+export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3 } }) => {
+    const { rows, cols } = gridSize;
+    const card = generateBingoCard(events, results, rows, cols);
 
     return (
         <div className="bingo-card">
