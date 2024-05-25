@@ -15,8 +15,24 @@
 .bingo-cell {
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
     padding: 10px; /* Adjust padding for responsiveness */
     border: 1px solid #000;
     background-color: #f0f0f0;
+}
+
+.bingo-event {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px; /* Adjust padding for responsiveness */
+}
+
+.bingo-result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px; /* Adjust padding for responsiveness */
+    padding-top: 10px;
 }

@@ -14,7 +14,7 @@ export const Card = ({ bingoCards }) => {
                     <div key={index} className="col-lg-8 col-xl-6 mb-4">
                         <div className="card card-spacing text-center">
                             <div className="card-body">
-                                <Bingo events={card.events} gridSize={card.gridSize} />
+                                <Bingo events={card.events} results={card.results} gridSize={card.gridSize} />
                                 <h5 className="card-title">Custo: {card.valor}</h5>
                                 <button className="btn btn-primary mt-3" onClick={() => card}>
                                     Comprar

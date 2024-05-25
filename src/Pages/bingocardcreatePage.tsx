@@ -9,13 +9,14 @@ import { NavBar } from '../components/navbar/navbar';
 import './bingocardcreatePage.scss';
 
 export const BingocardcreatePage = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [bingoCards, setBingoCards] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    //const [evento, setEvento] = useState('');
     const [valor, setValor] = useState('');
     const [isCreatingANewCard, setisCreatingANewCard] = useState(false);
     const [gridSize, setGridSize] = useState(3); // Default to 3x3 grid
     const [events, setEvents] = useState(Array(9).fill('')); // Default 9 empty events
+    const [results, setResults] = useState(Array(9).fill('')); // Default 9 empty events
 
     const navigate = useNavigate();
 
@@ -47,6 +48,7 @@ export const BingocardcreatePage = () => {
     const handleGridSizeChange = size => {
         setGridSize(size);
         setEvents(Array(size * size).fill(''));
+        setResults(Array(size * size).fill(''));
     };
 
     const handleEventChange = (index, value) => {
@@ -56,13 +58,20 @@ export const BingocardcreatePage = () => {
         setEvents(newEvents);
     };
 
+    const handleResultChange = (index, value) => {
+        const newResults = [...results];
+
+        newResults[index] = value;
+        setResults(newResults);
+    };
+
     const addBingoCard = async event => {
         event.preventDefault();
         const newBingoCard = {
-            //evento,
             valor,
             events,
             gridSize,
+            results,
             id_creator: auth.currentUser.uid,
             createdAt: serverTimestamp(),
             lastUpdate: serverTimestamp()
@@ -73,9 +82,9 @@ export const BingocardcreatePage = () => {
 
             setisCreatingANewCard(true);
             await setDoc(cardRef, newBingoCard);
-            //setEvento('');
             setValor('');
             setEvents(Array(gridSize * gridSize).fill(''));
+            setResults(Array(gridSize * gridSize).fill(''));
         } catch (error) {
             console.error('Erro ao adicionar o cartão bingo', error);
         }
@@ -96,15 +105,6 @@ export const BingocardcreatePage = () => {
             )}
             {!isLoading && (
                 <div className="container">
-                    <ul className="list-group">
-                        {bingoCards.map(card => {
-                            return (
-                                <li key={card.evento} className="list-group-item">
-                                    {card.evento1}
-                                </li>
-                            );
-                        })}
-                    </ul>
                     {!isCreatingANewCard && (
                         <form onSubmit={addBingoCard}>
                             <div className="row">
@@ -114,19 +114,25 @@ export const BingocardcreatePage = () => {
                                     <option value="5">5x5</option>
                                 </select>
                             </div>
-                            <div className="row">
-                                {/* <input type="text" placeholder="Evento" value={evento} onChange={e => setEvento(e.target.value)} /> */}
+                            <div className="card-value">
                                 <input type="text" placeholder="Valor" value={valor} onChange={e => setValor(e.target.value)} />
                             </div>
                             <div className={getInputGridClass()}>
                                 {events.map((event, index) => (
-                                    <input
-                                        key={index}
-                                        type="text"
-                                        placeholder={`Evento ${index + 1}`}
-                                        value={event}
-                                        onChange={e => handleEventChange(index, e.target.value)}
-                                    />
+                                    <div key={index} className="event-result-pair">
+                                        <input
+                                            type="text"
+                                            placeholder={`Evento ${index + 1}`}
+                                            value={event}
+                                            onChange={e => handleEventChange(index, e.target.value)}
+                                        />
+                                        <input
+                                            type="text"
+                                            placeholder={`Resultado ${index + 1}`}
+                                            value={results[index]}
+                                            onChange={e => handleResultChange(index, e.target.value)}
+                                        />
+                                    </div>
                                 ))}
                             </div>
                             <button className="button_create_card" type="submit">
