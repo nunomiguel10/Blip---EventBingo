@@ -69,9 +69,11 @@ export const BingocardcreatePage = () => {
         });
     };
 
-    const addBingoCard = async (event: React.FormEvent) => {
+    const addBingoCard = async event => {
         event.preventDefault();
+        const cardRef = doc(collection(db, 'BingoCards')); // Gera uma referência de documento com ID
         const newBingoCard = {
+            id: cardRef.id, // Adiciona o ID do documento ao objeto do cartão Bingo
             valor,
             events,
             gridSize,
@@ -82,8 +84,6 @@ export const BingocardcreatePage = () => {
         };
 
         try {
-            const cardRef = doc(collection(db, 'BingoCards'));
-
             setIsCreatingANewCard(true);
             await setDoc(cardRef, newBingoCard);
             setValor('');

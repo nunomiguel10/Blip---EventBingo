@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useEffect, useState } from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { doc, DocumentData, collection, onSnapshot, /*query*/ serverTimestamp, setDoc /*where*/ } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 import { NavBar } from '../components/navbar/navbar';
 import db from '../Firebase';
@@ -10,58 +10,46 @@ import { Card } from '../components/card/card';
 export const CardsPage = () => {
     const [bingoCards, setBingoCards] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    // const [evento, setEvento] = useState('');
-    // const [valor, setValor] = useState('');
-    // const [data, setData] = useState('');
-    // const [hora, setHora] = useState('');
-    // const [isCreatingANewCard, setisCreatingANewCard] = useState(false);
+    const auth = getAuth();
 
     useEffect(() => {
-        const colletionRef = collection(db, 'BingoCards');
-        // const queryToDataBase = query(colletionRef, where('evento', '>=', 'Lakers'), where('evento', '<=', 'Lakers' + '\uf8ff'));
+        const fetchBingoCards = async () => {
+            const user = auth.currentUser;
 
-        setIsLoading(true);
-        const unsub = onSnapshot(colletionRef, querySnapshot => {
-            const items: DocumentData[] = [];
+            if (user) {
+                setIsLoading(true);
 
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            querySnapshot.forEach(doc => {
-                items.push(doc.data());
-            });
-            setBingoCards(items);
-            setIsLoading(false);
-        });
+                try {
+                    // Obtenha o documento do usuário
+                    const userDocRef = doc(db, 'Utilizador', user.uid);
+                    const userDocSnap = await getDoc(userDocRef);
 
-        return () => {
-            unsub();
+                    if (userDocSnap.exists()) {
+                        const userData = userDocSnap.data();
+                        const cardIds = userData.cartões || [];
+
+                        // Obtenha os cartões de Bingo associados ao usuário
+                        const cardPromises = cardIds.map(async cardId => {
+                            const cardDocRef = doc(db, 'BingoCards', cardId);
+                            const cardDocSnap = await getDoc(cardDocRef);
+
+                            return { id: cardDocRef.id, ...cardDocSnap.data() };
+                        });
+
+                        const cards = await Promise.all(cardPromises);
+
+                        setBingoCards(cards);
+                    }
+                } catch (error) {
+                    console.error('Erro ao buscar os cartões do usuário:', error);
+                }
+
+                setIsLoading(false);
+            }
         };
-    }, []);
 
-    // const addBingoCard = async event => {
-    //     event.preventDefault();
-    //     const newBingoCard = {
-    //         evento,
-    //         data,
-    //         valor,
-    //         hora,
-    //         createdAt: serverTimestamp(),
-    //         lastUpdate: serverTimestamp()
-    //     };
-
-    //     try {
-    //         const cardRef = doc(collection(db, 'BingoCards'));
-
-    //         setisCreatingANewCard(true);
-    //         await setDoc(cardRef, newBingoCard);
-    //         setEvento('');
-    //         setValor('');
-    //         setData('');
-    //         setHora('');
-    //     } catch (error) {
-    //         console.error('Erro ao adicionar o cartão bingo', error);
-    //     }
-    //     setisCreatingANewCard(false);
-    // };
+        fetchBingoCards();
+    }, [auth]);
 
     return (
         <>
@@ -74,28 +62,8 @@ export const CardsPage = () => {
             {!isLoading && (
                 <div>
                     <div className="row justify-content-center">
-                        {isLoading ? (
-                            <div className="spinner-border" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </div>
-                        ) : (
-                            <Card bingoCards={bingoCards} />
-                        )}
+                        {bingoCards.length > 0 ? <Card bingoCards={bingoCards} showBuyButton={false} /> : <p>Nenhum cartão de Bingo encontrado.</p>}
                     </div>
-                    {/* {!isCreatingANewCard && (
-                        <form onSubmit={addBingoCard}>
-                            <input type="text" placeholder="Evento" value={evento} onChange={e => setEvento(e.target.value)} />
-                            <input type="text" placeholder="Valor" value={valor} onChange={e => setValor(e.target.value)} />
-                            <input type="date" placeholder="Data" value={data} onChange={e => setData(e.target.value)} />
-                            <input type="time" placeholder="Hora" value={hora} onChange={e => setHora(e.target.value)} />
-                            <button type="submit">Adicionar Cartão de Bingo</button>
-                        </form>
-                    )}
-                    {isCreatingANewCard && (
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                    )} */}
                 </div>
             )}
         </>
