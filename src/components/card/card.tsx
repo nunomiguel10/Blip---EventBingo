@@ -1,15 +1,22 @@
 /* eslint-disable react/prop-types */
 //@ts-nocheck
+import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 import db from '../../Firebase.ts';
 import { Bingo } from '../Bingo/Bingo';
 
 import './card.scss';
 
-export const Card = ({ bingoCards, showBuyButton = true }) => {
+export const Card = ({ bingoCards, showBuyButton = true, showEditButton = true }) => {
     const auth = getAuth();
+    const navigate = useNavigate();
+
+    const handleEditClick = card => {
+        navigate('/editcard', { state: { card } }); // Pass card data via state
+    };
 
     const handleBuy = async card => {
         const user = auth.currentUser;
@@ -44,9 +51,17 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                                 creditos: newCredits
                             });
 
-                            //console.log('Cartão comprado com sucesso:', cardId);
+                            // Exibe notificação de sucesso
+                            toast.success('Cartão comprado com sucesso!', {
+                                position: toast.POSITION.TOP_CENTER
+                            });
+
+                            // Marca o cartão como comprado
+                            card.comprado = true;
                         } else {
-                            console.error('Créditos insuficientes para comprar o cartão.');
+                            toast.error('Créditos insuficientes para comprar o cartão.', {
+                                position: toast.POSITION.TOP_CENTER
+                            });
                         }
                     }
                 } else {
@@ -69,10 +84,15 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                             <div className="card-body">
                                 <Bingo events={card.events} results={card.results} gridSize={card.gridSize} />
                                 <h5 className="card-value">Custo: {card.valor} créditos</h5>
-                                <h5 className="card-winnings">Ganhos Possíveis: créditos</h5>
+                                <h5 className="card-winnings">Ganhos Possíveis: {card.valor * 3} créditos</h5>
                                 {showBuyButton && (
                                     <button className="btn btn-primary mt-3" onClick={() => handleBuy(card)}>
                                         Comprar
+                                    </button>
+                                )}
+                                {showEditButton && (
+                                    <button className="btn btn-primary mt-3" onClick={() => handleEditClick(card)}>
+                                        Editar
                                     </button>
                                 )}
                             </div>

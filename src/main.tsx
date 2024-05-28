@@ -9,6 +9,8 @@ import { BingocardcreatePage } from './Pages/bingocardcreatePage.tsx';
 import { CardsPage } from './Pages/cardsPages.tsx';
 import { UserPage } from './Pages/userPage.tsx';
 import { App } from './App.tsx';
+import { EditCardPage } from './Pages/editcardPage.tsx';
+import { RankingPage } from './Pages/rankingPage.tsx';
 
 import './index.scss';
 
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
             {
                 path: '/cardPage',
                 element: <CardsPage />
+            },
+            {
+                path: '/editCard',
+                element: <EditCardPage />
+            },
+            {
+                path: '/rankingPage',
+                element: <RankingPage />
             }
         ]
     }

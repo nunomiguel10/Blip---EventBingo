@@ -62,7 +62,11 @@ export const CardsPage = () => {
             {!isLoading && (
                 <div>
                     <div className="row justify-content-center">
-                        {bingoCards.length > 0 ? <Card bingoCards={bingoCards} showBuyButton={false} /> : <p>Nenhum cartão de Bingo encontrado.</p>}
+                        {bingoCards.length > 0 ? (
+                            <Card bingoCards={bingoCards} showBuyButton={false} showEditButton={false} />
+                        ) : (
+                            <p>Nenhum cartão de Bingo encontrado.</p>
+                        )}
                     </div>
                 </div>
             )}

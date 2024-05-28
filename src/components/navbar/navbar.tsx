@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { User, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 import db, { auth } from '../../Firebase';
 
@@ -12,25 +12,34 @@ export const NavBar = () => {
     const [name, setUserName] = useState('');
 
     useEffect(() => {
+        let unsubscribeUserDoc = () => {};
+
         const fetchUserData = async (user: User | null) => {
             if (user) {
-                // Buscando créditos do usuário
-                const userDoc = await getDoc(doc(db, 'Utilizador', user.uid));
+                // Buscando créditos do usuário em tempo real
+                const userDocRef = doc(db, 'Utilizador', user.uid);
 
-                if (userDoc.exists()) {
-                    setCredits(userDoc.data().creditos);
-                }
+                unsubscribeUserDoc = onSnapshot(userDocRef, userDoc => {
+                    if (userDoc.exists()) {
+                        setCredits(userDoc.data().creditos);
+                    }
+                });
 
                 // Buscando nome do usuário no Firebase Authentication
                 setUserName(user.displayName || ''); // Nome do usuário se disponível, senão vazio
             }
         };
 
-        const unsubscribe = onAuthStateChanged(auth, user => {
-            fetchUserData(user);
+        const unsubscribeAuth = onAuthStateChanged(auth, user => {
+            if (user) {
+                fetchUserData(user);
+            }
         });
 
-        return () => unsubscribe();
+        return () => {
+            unsubscribeAuth();
+            unsubscribeUserDoc();
+        };
     }, []);
 
     return (
@@ -63,20 +72,10 @@ export const NavBar = () => {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/userPage">
-                                Ganhos
+                            <Link className="nav-link" to="/rankingPage">
+                                Ranking
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/userPage">
-                                Encerrados
-                            </Link>
-                        </li>
-                        {/* <li className="nav-item">
-                            <Link className="nav-link" to="/userPage">
-                                Adicionar Créditos
-                            </Link>
-                        </li> */}
                     </ul>
                 </div>
                 <ul className="nav justify-content-center">
