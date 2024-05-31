@@ -83,7 +83,7 @@ export const NavBar = () => {
                         <>Olá {name}!</>
                     </li>
                     <li className="nav-item">
-                        <img src="images/carrinho.png" alt="" style={{ width: '35px', height: '30px' }} /> {credits} créditos
+                        <img src="images/credits.png" alt="" style={{ width: '35px', height: '35px' }} /> {credits}
                     </li>
                 </ul>
             </div>

@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 //@ts-nocheck
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { doc, getDoc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { toast } from 'react-toastify';
 
 import db from '../../Firebase.ts';
@@ -10,9 +11,43 @@ import { Bingo } from '../Bingo/Bingo';
 
 import './card.scss';
 
-export const Card = ({ bingoCards, showBuyButton = true, showEditButton = true }) => {
+export const Card = ({ bingoCards, showBuyButton = true }) => {
     const auth = getAuth();
     const navigate = useNavigate();
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const unsubscribeFromAuth = onAuthStateChanged(auth, user => {
+            if (user) {
+                const userDocRef = doc(db, 'Utilizador', user.uid);
+                const unsubscribeFromSnapshot = onSnapshot(
+                    userDocRef,
+                    userDoc => {
+                        if (userDoc.exists()) {
+                            const userData = userDoc.data();
+
+                            setIsAdmin(userData.role === 'Admin');
+                        } else {
+                            setIsAdmin(false);
+                        }
+                    },
+                    error => {
+                        console.error('Error fetching user role:', error);
+                    }
+                );
+
+                return () => {
+                    unsubscribeFromSnapshot();
+                };
+            } else {
+                setIsAdmin(false);
+            }
+        });
+
+        return () => {
+            unsubscribeFromAuth();
+        };
+    }, [auth]);
 
     const handleEditClick = card => {
         navigate('/editcard', { state: { card } }); // Pass card data via state
@@ -87,7 +122,7 @@ export const Card = ({ bingoCards, showBuyButton = true, showEditButton = true }
                                         Comprar
                                     </button>
                                 )}
-                                {showEditButton && (
+                                {isAdmin && (
                                     <button className="btn btn-primary mt-3" onClick={() => handleEditClick(card)}>
                                         Editar
                                     </button>
