@@ -73,6 +73,9 @@ export const BingocardcreatePage = () => {
 
     const addBingoCard = async event => {
         event.preventDefault();
+        if (!valor) {
+            alert('Por favor, preencha o campo "Valor".');
+        }
         const cardRef = doc(collection(db, 'BingoCards')); // Gera uma referência de documento com ID
         const newBingoCard = {
             id: cardRef.id, // Adiciona o ID do documento ao objeto do cartão Bingo
@@ -127,7 +130,13 @@ export const BingocardcreatePage = () => {
                                 </select>
                             </div>
                             <div className="card-value-create">
-                                <input type="text" placeholder="Valor" value={valor} onChange={e => setValor(e.target.value)} />
+                                <input
+                                    type="text"
+                                    placeholder="Valor"
+                                    value={valor}
+                                    onChange={e => setValor(e.target.value)}
+                                    required // Torna o campo obrigatório
+                                />
                             </div>
                             <div className={getInputGridClass()}>
                                 {events.map((event, index) => (
