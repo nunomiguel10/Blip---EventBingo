@@ -2,7 +2,7 @@
 //@ts-nocheck
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, onSnapshot, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { toast } from 'react-toastify';
 
@@ -58,7 +58,6 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
 
         if (user) {
             try {
-                // Busca o documento na coleção "BingoCards"
                 const bingoCardDocRef = doc(db, 'BingoCards', card.id);
                 const bingoCardDocSnap = await getDoc(bingoCardDocRef);
 
@@ -71,22 +70,15 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                         const currentCards = userDocSnap.data().cartões || [];
 
                         if (userCredits >= card.valor) {
-                            // Use o ID do documento Firestore do BingoCard como ID do cartão
                             const cardId = bingoCardDocRef.id;
-
-                            // Adiciona o ID do cartão à lista de cartões do usuário
                             const updatedCards = [...currentCards, cardId];
-
-                            // Calcula os novos créditos do usuário
                             const newCredits = userCredits - card.valor;
 
-                            // Atualiza o documento do usuário com os novos cartões e créditos
                             await updateDoc(userDocRef, {
                                 cartões: updatedCards,
                                 creditos: newCredits
                             });
 
-                            // Exibe notificação de sucesso
                             toast.success('Cartão comprado com sucesso!', {
                                 position: 'top-center'
                             });
@@ -107,6 +99,40 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
         }
     };
 
+    const handleRemoveClick = async card => {
+        try {
+            const bingoCardDocRef = doc(db, 'BingoCards', card.id);
+
+            // Remove o cartão da coleção "BingoCards"
+            await deleteDoc(bingoCardDocRef);
+
+            // Busca todos os usuários que compraram este cartão
+            const usersQuery = query(collection(db, 'Utilizador'), where('cartões', 'array-contains', card.id));
+            const usersSnapshot = await getDocs(usersQuery);
+
+            // Remove o ID do cartão da lista de cartões de cada usuário
+            const updateUserPromises = usersSnapshot.docs.map(async userDoc => {
+                const userDocRef = doc(db, 'Utilizador', userDoc.id);
+                const userData = userDoc.data();
+                const updatedCards = userData.cartões.filter(cardId => cardId !== card.id);
+
+                await updateDoc(userDocRef, { cartões: updatedCards });
+            });
+
+            // Espera todas as atualizações dos usuários serem concluídas
+            await Promise.all(updateUserPromises);
+
+            toast.success('Cartão removido com sucesso!', {
+                position: 'top-center'
+            });
+        } catch (error) {
+            console.error('Erro ao remover o cartão:', error);
+            toast.error('Erro ao remover o cartão.', {
+                position: 'top-center'
+            });
+        }
+    };
+
     return (
         <div className="container-fluid">
             <div className="row justify-content-center">
@@ -123,9 +149,14 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                                     </button>
                                 )}
                                 {isAdmin && (
-                                    <button className="btn btn-primary mt-3" onClick={() => handleEditClick(card)}>
-                                        Editar
-                                    </button>
+                                    <>
+                                        <button className="btn btn-primary mt-3" onClick={() => handleEditClick(card)}>
+                                            Editar
+                                        </button>
+                                        <button className="btn btn-danger mt-3" onClick={() => handleRemoveClick(card)}>
+                                            Remover
+                                        </button>
+                                    </>
                                 )}
                             </div>
                         </div>
