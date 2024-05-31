@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { doc, DocumentData, collection, onSnapshot, query, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
-import db, { auth } from '../Firebase.ts';
+import db from '../Firebase.ts';
 import { NavBar } from '../components/navbar/navbar';
 
 import './bingocardcreatePage.scss';
@@ -17,6 +17,7 @@ export const BingocardcreatePage = () => {
     const [gridSize, setGridSize] = useState<{ rows: number; cols: number }>({ rows: 3, cols: 3 }); // Default to 3x3 grid
     const [events, setEvents] = useState<string[]>(Array(9).fill('')); // Default 9 empty events
     const [results, setResults] = useState<string[]>(Array(9).fill('')); // Default 9 empty results
+    const [checks, setChecks] = useState<boolean[]>(Array(9).fill('')); // Default 9 false checks
 
     const navigate = useNavigate();
 
@@ -47,6 +48,7 @@ export const BingocardcreatePage = () => {
         setGridSize({ rows, cols });
         setEvents(Array(rows * cols).fill(''));
         setResults(Array(rows * cols).fill(''));
+        setChecks(Array(rows * cols).fill('')); // Inicializar o array de booleanos
     };
 
     const handleEventChange = (index: number, value: string) => {
@@ -78,7 +80,7 @@ export const BingocardcreatePage = () => {
             events,
             gridSize,
             results,
-            id_creator: auth.currentUser?.uid,
+            checks, // Adicionar o array de booleanos
             createdAt: serverTimestamp(),
             lastUpdate: serverTimestamp()
         };
@@ -89,6 +91,7 @@ export const BingocardcreatePage = () => {
             setValor('');
             setEvents(Array(gridSize.rows * gridSize.cols).fill(''));
             setResults(Array(gridSize.rows * gridSize.cols).fill(''));
+            setChecks(Array(gridSize.rows * gridSize.cols).fill('')); // Resetar o array de booleanos
         } catch (error) {
             console.error('Erro ao adicionar o cartão bingo', error);
         }

@@ -23,9 +23,15 @@ const generateBingoCard = (events, results, rows, cols) => {
     return card;
 };
 
-export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3 } }) => {
+export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3 }, checks = [], onCheckToggle, showCheckButtons }) => {
     const { rows, cols } = gridSize;
     const card = generateBingoCard(events, results, rows, cols);
+
+    const handleCheckToggle = (index, value) => {
+        if (onCheckToggle) {
+            onCheckToggle(index, value);
+        }
+    };
 
     return (
         <div className="bingo-card">
@@ -35,6 +41,22 @@ export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3
                         <div key={colIndex} className="bingo-cell">
                             <div className="bingo-event">{cell.event}</div>
                             <div className="bingo-result">{cell.result}</div>
+                            {showCheckButtons && (
+                                <div className="check-buttons">
+                                    <button
+                                        className={`btn btn-primary mt-3 ${checks[rowIndex * cols + colIndex] ? 'checked' : ''}`}
+                                        onClick={() => handleCheckToggle(rowIndex * cols + colIndex, true)} // Passa true para o botão True
+                                    >
+                                        Certo
+                                    </button>
+                                    <button
+                                        className={`btn btn-primary mt-3 ${!checks[rowIndex * cols + colIndex] ? 'checked' : ''}`}
+                                        onClick={() => handleCheckToggle(rowIndex * cols + colIndex, false)} // Passa false para o botão False
+                                    >
+                                        Errado
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

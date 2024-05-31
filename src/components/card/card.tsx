@@ -53,14 +53,11 @@ export const Card = ({ bingoCards, showBuyButton = true, showEditButton = true }
 
                             // Exibe notificação de sucesso
                             toast.success('Cartão comprado com sucesso!', {
-                                position: toast.POSITION.TOP_CENTER
+                                position: 'top-center'
                             });
-
-                            // Marca o cartão como comprado
-                            card.comprado = true;
                         } else {
                             toast.error('Créditos insuficientes para comprar o cartão.', {
-                                position: toast.POSITION.TOP_CENTER
+                                position: 'top-center'
                             });
                         }
                     }
@@ -82,7 +79,7 @@ export const Card = ({ bingoCards, showBuyButton = true, showEditButton = true }
                     <div key={index} className="col-lg-8 col-xl-6 mb-4">
                         <div className="card card-spacing text-center">
                             <div className="card-body">
-                                <Bingo events={card.events} results={card.results} gridSize={card.gridSize} />
+                                <Bingo events={card.events} results={card.results} checks={card.checks} gridSize={card.gridSize} />
                                 <h5 className="card-value">Custo: {card.valor} créditos</h5>
                                 <h5 className="card-winnings">Ganhos Possíveis: {card.valor * 3} créditos</h5>
                                 {showBuyButton && (
