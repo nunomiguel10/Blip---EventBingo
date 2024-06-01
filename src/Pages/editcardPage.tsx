@@ -52,22 +52,62 @@ export const EditCardPage = () => {
     };
 
     const handleFinishCard = async () => {
-        const allTrue = checks.every(check => check === true);
+        const rows = card.gridSize.rows;
+        const cols = card.gridSize.cols;
+        const totalCells = rows * cols;
+        const cellsPerRow = cols;
 
-        if (allTrue) {
+        const markedRows = new Set();
+
+        // Verifica quais linhas estão marcadas
+        for (let i = 0; i < totalCells; i += cellsPerRow) {
+            let isRowMarked = true;
+
+            for (let j = 0; j < cellsPerRow; j++) {
+                if (!checks[i + j]) {
+                    isRowMarked = false;
+                    break;
+                }
+            }
+            if (isRowMarked) {
+                markedRows.add(i);
+            }
+        }
+
+        // Calcula os créditos com base nas linhas marcadas
+        let extraCredits = 0;
+
+        if (markedRows.size === 1) {
+            // Se apenas uma linha estiver marcada, ganhe metade dos créditos do cartão
+            extraCredits = card.valor / 2;
+        } else if (markedRows.size === 2) {
+            // Se duas linhas estiverem marcadas, ganhe o valor do cartão
+            extraCredits = parseFloat(card.valor);
+        } else if (markedRows.size === rows) {
+            // Se mais de duas linhas estiverem marcadas e menos ou igual ao número total de linhas, ganhe 1,5 vezes o valor do cartão
+            extraCredits = card.valor * 3;
+        } else if (markedRows.size > 2 && markedRows.size <= rows) {
+            // Se todas as linhas estiverem marcadas, ganhe o valor do cartão * 3
+            extraCredits = card.valor * 1.5;
+        }
+
+        // Atualiza os créditos para os usuários que possuem este cartão
+        if (extraCredits > 0) {
             const usersRef = collection(db, 'Utilizador');
             const q = query(usersRef, where('cartões', 'array-contains', card.id));
             const querySnapshot = await getDocs(q);
 
             try {
-                // Atualizar os documentos individualmente
                 querySnapshot.forEach(async userDoc => {
-                    const userRef = doc(db, 'Utilizador', userDoc.id); // Corrigido
+                    const userRef = doc(db, 'Utilizador', userDoc.id);
                     const userData = userDoc.data();
-                    const newCredits = (userData.creditos || 0) + card.valor * 3;
+                    const existingCredits = parseFloat(userData.creditos) || 0; // Convertendo para número
+
+                    // Adiciona os créditos extras aos créditos existentes
+                    const newCredits = parseFloat(existingCredits + extraCredits);
 
                     try {
-                        await updateDoc(userRef, { creditos: newCredits });
+                        await updateDoc(userRef, { creditos: newCredits.toString() }); // Convertendo de volta para string
                     } catch (error) {
                         console.error('Erro ao atribuir créditos extras ao usuário:', userDoc.id, error);
                     }
