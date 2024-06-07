@@ -69,10 +69,14 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                         const userCredits = userDocSnap.data().creditos || 0;
                         const currentCards = userDocSnap.data().cartões || [];
 
-                        if (userCredits >= card.valor) {
+                        // Ensure values are interpreted as numbers
+                        const userCreditsNumber = Number(userCredits);
+                        const cardValueNumber = Number(card.valor);
+
+                        if (userCreditsNumber >= cardValueNumber) {
                             const cardId = bingoCardDocRef.id;
                             const updatedCards = [...currentCards, cardId];
-                            const newCredits = userCredits - card.valor;
+                            const newCredits = userCreditsNumber - cardValueNumber;
 
                             await updateDoc(userDocRef, {
                                 cartões: updatedCards,
@@ -83,10 +87,13 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                                 position: 'top-center'
                             });
                         } else {
+                            console.error(`Créditos insuficientes: ${userCreditsNumber} < ${cardValueNumber}`);
                             toast.error('Créditos insuficientes para comprar o cartão.', {
                                 position: 'top-center'
                             });
                         }
+                    } else {
+                        console.error('User document does not exist.');
                     }
                 } else {
                     console.error('BingoCard não encontrado.');

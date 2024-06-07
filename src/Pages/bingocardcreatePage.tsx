@@ -14,6 +14,7 @@ export const BingocardcreatePage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [valor, setValor] = useState<string>('');
     const [isCreatingANewCard, setIsCreatingANewCard] = useState<boolean>(false);
+    const [isActive, setIsActive] = useState<boolean>(true);
     const [gridSize, setGridSize] = useState<{ rows: number; cols: number }>({ rows: 3, cols: 3 }); // Default to 3x3 grid
     const [events, setEvents] = useState<string[]>(Array(9).fill('')); // Default 9 empty events
     const [results, setResults] = useState<string[]>(Array(9).fill('')); // Default 9 empty results
@@ -39,6 +40,7 @@ export const BingocardcreatePage = () => {
             });
             setBingoCards(items);
             setIsLoading(false);
+            setIsActive(true);
         });
 
         return () => unsub();
@@ -83,6 +85,7 @@ export const BingocardcreatePage = () => {
             events,
             gridSize,
             results,
+            isActive,
             checks, // Adicionar o array de booleanos
             createdAt: serverTimestamp(),
             lastUpdate: serverTimestamp()

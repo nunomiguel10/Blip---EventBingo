@@ -101,10 +101,16 @@ export const EditCardPage = () => {
                 querySnapshot.forEach(async userDoc => {
                     const userRef = doc(db, 'Utilizador', userDoc.id);
                     const userData = userDoc.data();
+
+                    // Verifica quantas cópias do cartão o usuário possui
+                    const cardCopies = userData.cartões.filter(cardId => cardId === card.id).length;
+
+                    // Calcula os créditos extras com base no número de cópias do cartão
+                    const totalExtraCredits = extraCredits * cardCopies;
                     const existingCredits = parseFloat(userData.creditos) || 0; // Convertendo para número
 
                     // Adiciona os créditos extras aos créditos existentes
-                    const newCredits = parseFloat(existingCredits + extraCredits);
+                    const newCredits = parseFloat(existingCredits + totalExtraCredits);
 
                     try {
                         await updateDoc(userRef, { creditos: newCredits.toString() }); // Convertendo de volta para string
