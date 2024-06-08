@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { updateDoc, doc, collection, getDocs, query, where } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 import db from '../Firebase.ts';
 import { NavBar } from '../components/navbar/navbar';
@@ -91,36 +92,48 @@ export const EditCardPage = () => {
             extraCredits = card.valor * 1.5;
         }
 
-        // Atualiza os créditos para os usuários que possuem este cartão
-        if (extraCredits > 0) {
-            const usersRef = collection(db, 'Utilizador');
-            const q = query(usersRef, where('cartões', 'array-contains', card.id));
-            const querySnapshot = await getDocs(q);
+        const cardRef = doc(db, 'BingoCards', card.id);
 
-            try {
-                querySnapshot.forEach(async userDoc => {
-                    const userRef = doc(db, 'Utilizador', userDoc.id);
-                    const userData = userDoc.data();
+        try {
+            await updateDoc(cardRef, { isActive: false });
 
-                    // Verifica quantas cópias do cartão o usuário possui
-                    const cardCopies = userData.cartões.filter(cardId => cardId === card.id).length;
+            // Atualiza os créditos para os usuários que possuem este cartão
+            if (extraCredits > 0) {
+                const usersRef = collection(db, 'Utilizador');
+                const q = query(usersRef, where('cartões', 'array-contains', card.id));
+                const querySnapshot = await getDocs(q);
 
-                    // Calcula os créditos extras com base no número de cópias do cartão
-                    const totalExtraCredits = extraCredits * cardCopies;
-                    const existingCredits = parseFloat(userData.creditos) || 0; // Convertendo para número
+                try {
+                    querySnapshot.forEach(async userDoc => {
+                        const userRef = doc(db, 'Utilizador', userDoc.id);
+                        const userData = userDoc.data();
 
-                    // Adiciona os créditos extras aos créditos existentes
-                    const newCredits = parseFloat(existingCredits + totalExtraCredits);
+                        // Verifica quantas cópias do cartão o usuário possui
+                        const cardCopies = userData.cartões.filter(cardId => cardId === card.id).length;
 
-                    try {
-                        await updateDoc(userRef, { creditos: newCredits.toString() }); // Convertendo de volta para string
-                    } catch (error) {
-                        console.error('Erro ao atribuir créditos extras ao usuário:', userDoc.id, error);
-                    }
-                });
-            } catch (error) {
-                console.error('Erro ao atribuir créditos extras:', error);
+                        // Calcula os créditos extras com base no número de cópias do cartão
+                        const totalExtraCredits = extraCredits * cardCopies;
+                        const existingCredits = parseFloat(userData.creditos) || 0; // Convertendo para número
+
+                        // Adiciona os créditos extras aos créditos existentes
+                        const newCredits = parseFloat(existingCredits + totalExtraCredits);
+
+                        try {
+                            await updateDoc(userRef, { creditos: newCredits.toString() }); // Convertendo de volta para string
+                        } catch (error) {
+                            console.error('Erro ao atribuir créditos extras ao usuário:', userDoc.id, error);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Erro ao atribuir créditos extras:', error);
+                }
             }
+
+            // Sucesso: Mostra a notificação e navega de volta para a página do usuário
+            toast.success('Cartão finalizado com sucesso!');
+            navigate('/userPage');
+        } catch (error) {
+            toast.error('Erro ao finalizar o cartão. Tente novamente.');
         }
     };
 

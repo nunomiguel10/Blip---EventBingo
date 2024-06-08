@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, onSnapshot, query, doc } from 'firebase/firestore';
+import { collection, onSnapshot, query, doc, where } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import db from '../Firebase.ts';
@@ -56,7 +56,7 @@ export const UserPage = () => {
 
     useEffect(() => {
         const collectionRef = collection(db, 'BingoCards');
-        const queryToDataBase = query(collectionRef);
+        const queryToDataBase = query(collectionRef, where('isActive', '==', true));
 
         setIsLoading(true);
         const unsub = onSnapshot(queryToDataBase, querySnapshot => {
@@ -81,7 +81,7 @@ export const UserPage = () => {
             <div className="container_user_page">
                 <div>
                     {isAdmin && (
-                        <button className="button_userpage" onClick={handleClick}>
+                        <button className="btn btn-primary rounded-pill px-3" onClick={handleClick}>
                             Adicionar cartão
                         </button>
                     )}
