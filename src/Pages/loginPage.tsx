@@ -1,6 +1,7 @@
+//@ts-nocheck
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useState } from 'react';
-import { doc, setDoc, getDoc /*where*/ } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 import { UserPage } from './userPage.tsx';
 
@@ -11,7 +12,8 @@ import './loginPage.scss';
 export const LoginPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const handleGoogle = async () => {
+    const handleGoogle = async event => {
+        event.preventDefault();
         const provider = new GoogleAuthProvider();
 
         try {
@@ -48,21 +50,18 @@ export const LoginPage = () => {
     if (isLoggedIn) {
         return <UserPage />;
     }
-    //else {
-    //     return <LoginPage />;
-    // }
 
     return (
         <div className="container_login">
-            <div className="login-content">
-                {/* Coloque seu logotipo aqui */}
-                <img src="images/logo.png" alt="Logo" className="logo" />
-
-                {/* Botão de login */}
-                <button onClick={handleGoogle} className="butao_signin">
-                    <span className="google-icon"> </span>Sign In With Google
-                </button>
-            </div>
+            <main className="form-signin">
+                <form>
+                    <img src="images/logo.png" alt="Logo" className="logo mb-4" />
+                    <button onClick={handleGoogle} className="w-100 btn btn-lg btn-primary google-button">
+                        <img src="https://freesvg.org/img/1534129544.png" alt="Google Icon" className="google-icon" />
+                        <span className="button-text">Inicie sessão com o Google</span>
+                    </button>
+                </form>
+            </main>
         </div>
     );
 };

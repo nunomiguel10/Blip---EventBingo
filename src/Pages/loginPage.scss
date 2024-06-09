@@ -3,30 +3,168 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #a3a1a1;
 }
 
-.login-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.form-signin {
+    max-width: 340px;
+    padding: 15px;
+    margin: auto;
     text-align: center;
 }
 
-.butao_signin {
-    border-radius: 20px; 
+.google-button {
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding-top: 50px;
 }
 
 .google-icon {
-    width: 20px;
-    height: 20px;
-    background-image: url('https://freesvg.org/img/1534129544.png');
-    background-size: cover;
+    width: 25px;
+    height: 25px;
     margin-right: 10px;
 }
 
 .logo {
-    width: 400px; /* Reduzindo a largura do logotipo */
-    height: auto; /* Mantendo a altura proporcional */
+    width: 400px;
+    height: auto;
+    padding-right: 180px;
+}
+
+/* Media queries para diferentes tamanhos de tela */
+@media (max-width: 2560px) {
+    .logo {
+        width: 480px;
+        padding-bottom: 120px;
+    }
+    .form-signin {
+        max-width: 320px;
+    }
+    .google-icon {
+        width: 28px;
+        height: 28px;
+    }
+    .button-text {
+        font-size: 18px; /* Altere o tamanho conforme necessário */
+    }
+}
+
+@media (max-width: 1440px) {
+    .logo {
+        width: 440px;
+        padding-bottom: 100px;
+    }
+    .form-signin {
+        max-width: 300px;
+    }
+    .google-icon {
+        width: 28px;
+        height: 28px;
+    }
+    .button-text {
+        font-size: 16px; /* Altere o tamanho conforme necessário */
+    }
+}
+
+@media (max-width: 1024px) {
+    .logo {
+        width: 400px;
+        padding-bottom: 100px;
+        padding-right: 120px;
+    }
+    .form-signin {
+        max-width: 300px;
+    }
+    .google-icon {
+        width: 28px;
+        height: 28px;
+    }
+    .button-text {
+        font-size: 15px; /* Altere o tamanho conforme necessário */
+    }
+}
+
+@media (max-width: 768px) {
+    .logo {
+        width: 350px;
+        height: auto;
+        padding-bottom: 100px;
+        padding-right: 90px;
+    }
+    .form-signin {
+        max-width: 280px;
+    }
+    .google-icon {
+        width: 25px;
+        height: 25px;
+    }
+    .button-text {
+        font-size: 15px; 
+    }
+}
+
+@media (max-width: 425px) {
+    .logo {
+        width: 320px;
+        height: auto;
+        padding-bottom: 100px;
+        padding-right: 100px;
+    }
+    .form-signin {
+        max-width: 220px;
+        padding: 5px;
+    }
+    .google-icon {
+        width: 25px;
+        height: 25px;
+    }
+    .button-text {
+        font-size: 11px; 
+    }
+}
+
+@media (max-width: 375px) {
+    .logo {
+        width: 280px;
+        height: auto;
+        padding-bottom: 75px;
+        padding-right: 70px;
+    }
+    .form-signin {
+        max-width: 220px;
+        padding: 5px;
+    }
+    .google-icon {
+        width: 25px;
+        height: 25px;
+    }
+    .button-text {
+        font-size: 11px; 
+    }
+}
+
+@media (max-width: 320px) {
+    .logo {
+        width: 250px;
+        height: auto;
+        padding-right: 30px;
+        padding-bottom: 75px;
+    }
+    .form-signin {
+        max-width: 220px;
+        padding: 5px;
+    }
+    .google-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .google-icon {
+        width: 25px;
+        height: 25px;
+    }
+    .button-text {
+        font-size: 11px; 
+    }
 }

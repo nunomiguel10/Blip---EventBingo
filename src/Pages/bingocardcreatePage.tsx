@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { doc, DocumentData, collection, onSnapshot, query, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import db from '../Firebase.ts';
 import { NavBar } from '../components/navbar/navbar';
@@ -98,8 +99,10 @@ export const BingocardcreatePage = () => {
             setEvents(Array(gridSize.rows * gridSize.cols).fill(''));
             setResults(Array(gridSize.rows * gridSize.cols).fill(''));
             setChecks(Array(gridSize.rows * gridSize.cols).fill('')); // Resetar o array de booleanos
+            toast.success('Cartão criado com sucesso!');
+            navigate('/userPage');
         } catch (error) {
-            console.error('Erro ao adicionar o cartão bingo', error);
+            toast.error('Erro ao criar cartão!');
         }
         setIsCreatingANewCard(false);
     };
