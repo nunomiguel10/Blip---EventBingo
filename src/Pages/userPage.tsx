@@ -81,7 +81,7 @@ export const UserPage = () => {
             <div className="container_user_page">
                 <div>
                     {isAdmin && (
-                        <button className="btn btn-primary rounded-pill px-3" onClick={handleClick}>
+                        <button className="btn btn-primary rounded-pill px-3 button_userpage" onClick={handleClick}>
                             Adicionar cartão
                         </button>
                     )}

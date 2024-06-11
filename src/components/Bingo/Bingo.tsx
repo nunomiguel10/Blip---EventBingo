@@ -44,13 +44,13 @@ export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3
                             {showCheckButtons && (
                                 <div className="check-buttons">
                                     <button
-                                        className={`btn btn-success rounded-pill px-3 ${checks[rowIndex * cols + colIndex] ? 'checked' : ''}`}
+                                        className={`btn btn-success rounded-pill px-3 trueresult-button ${checks[rowIndex * cols + colIndex] ? 'checked' : ''}`}
                                         onClick={() => handleCheckToggle(rowIndex * cols + colIndex, true)} // Passa true para o botão True
                                     >
                                         Certo
                                     </button>
                                     <button
-                                        className={`btn btn-danger rounded-pill px-3 ${!checks[rowIndex * cols + colIndex] ? 'checked' : ''}`}
+                                        className={`btn btn-danger rounded-pill px-3 falseresult-button ${!checks[rowIndex * cols + colIndex] ? 'checked' : ''}`}
                                         onClick={() => handleCheckToggle(rowIndex * cols + colIndex, false)} // Passa false para o botão False
                                     >
                                         Errado

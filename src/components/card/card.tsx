@@ -151,16 +151,16 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                                 <h5 className="card-value">Custo: {card.valor} créditos</h5>
                                 <h5 className="card-winnings">Ganhos Possíveis: {card.valor * 3} créditos</h5>
                                 {showBuyButton && (
-                                    <button className="btn btn-primary mt-3" onClick={() => handleBuy(card)}>
+                                    <button className="btn btn-primary mt-3 buy-button" onClick={() => handleBuy(card)}>
                                         Comprar
                                     </button>
                                 )}
                                 {isAdmin && (
                                     <>
-                                        <button className="btn btn-primary mt-3" onClick={() => handleEditClick(card)}>
+                                        <button className="btn btn-primary mt-3 edit-button" onClick={() => handleEditClick(card)}>
                                             Editar
                                         </button>
-                                        <button className="btn btn-danger mt-3" onClick={() => handleRemoveClick(card)}>
+                                        <button className="btn btn-danger mt-3 remove-button" onClick={() => handleRemoveClick(card)}>
                                             Remover
                                         </button>
                                     </>

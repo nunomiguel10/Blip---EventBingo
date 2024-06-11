@@ -1,0 +1,50 @@
+.edit-buttons-container{
+    display: flex;
+    gap: 25px;
+}
+
+.endcard-button{
+    display: flex;
+    border-radius: 25px;
+    width: 200px;
+    height: 50px;
+    margin-left:650px;
+
+}
+
+.editcard-page{
+    background-color: #a3a1a1;
+    height: 100000%;
+}
+
+.editback-button{
+    display: flex;
+    border-radius: 25px;
+    width: 200px;
+    height: 50px;
+    margin: 25px;
+}
+
+@media (max-width: 768px) {
+    .edit-buttons-container{
+        display: flex;
+        gap: 25px;
+    }
+    
+    .endcard-button{
+        display: flex;
+        border-radius: 25px;
+        width: 200px;
+        height: 50px;
+        margin-left:150px;
+    
+    }
+    
+    .editback-button{
+        display: flex;
+        border-radius: 25px;
+        width: 200px;
+        height: 50px;
+        margin: 25px;
+    }
+}

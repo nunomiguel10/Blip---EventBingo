@@ -7,6 +7,8 @@ import { NavBar } from '../components/navbar/navbar';
 import db from '../Firebase';
 import { Card } from '../components/card/card';
 
+import './cardsPages.scss';
+
 export const CardsPage = () => {
     const [bingoCards, setBingoCards] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +62,7 @@ export const CardsPage = () => {
                 </div>
             )}
             {!isLoading && (
-                <div>
+                <div className="cardsPage_container">
                     <div className="row justify-content-center">
                         {bingoCards.length > 0 ? (
                             <Card bingoCards={bingoCards} showBuyButton={false} showEditButton={false} />

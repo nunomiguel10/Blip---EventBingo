@@ -1,3 +1,72 @@
-.ranking-container{
-    padding: 20px;
+.ranking-container {
+    background-color: #a3a1a1;
+    padding: 20px 100px;
+    font-size: 25px;
+    height: 100000%;
+    font-family: Arial;
+    overflow-x: auto; // Adiciona rolagem horizontal para tabelas largas em telas pequenas
+}
+
+.ranking-title {
+    display: flex;
+    padding: 25px;
+    background-color: #a3a1a1;
+}
+
+.table-ranking {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; // Garante que a tabela se ajuste ao container
+}
+
+.table-cell {
+    padding: 10px;
+}
+/* Adiciona estilos adicionais para a tabela */
+.table-ranking th{
+    border: 1px solid #000; /* Adiciona borda às células para melhor visualização */
+    text-align: center; /* Alinha o texto à esquerda */
+    word-wrap: break-word;
+}
+.table-ranking td {
+    border: 1px solid #000; /* Adiciona borda às células para melhor visualização */
+    text-align: left; /* Alinha o texto à esquerda */
+    word-wrap: break-word;
+}
+
+@media (max-width: 1200px) {
+    .ranking-container {
+        padding: 20px 50px;
+    }
+
+    .table-cell {
+        font-size: 20px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ranking-container {
+        padding: 10px 20px;
+    }
+
+    .table-cell {
+        font-size: 16px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 576px) {
+    .ranking-container {
+        padding: 5px 10px;
+    }
+
+    .table-cell {
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    .table-ranking {
+        font-size: 12px;
+    }
 }

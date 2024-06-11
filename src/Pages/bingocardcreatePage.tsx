@@ -110,7 +110,7 @@ export const BingocardcreatePage = () => {
     const getInputGridClass = () => `input-grid input-grid-${gridSize.rows}-${gridSize.cols}`;
 
     return (
-        <>
+        <div className="bingocardcreatepage-class">
             <NavBar />
             {isLoading && (
                 <div className="spinner-border" role="status" aria-label="Loading...">
@@ -118,7 +118,7 @@ export const BingocardcreatePage = () => {
                 </div>
             )}
             {!isLoading && (
-                <div className="container">
+                <div className="container bingocard-createpage">
                     {!isCreatingANewCard && (
                         <form onSubmit={addBingoCard}>
                             <div className="row">
@@ -136,13 +136,7 @@ export const BingocardcreatePage = () => {
                                 </select>
                             </div>
                             <div className="card-value-create">
-                                <input
-                                    type="text"
-                                    placeholder="Valor"
-                                    value={valor}
-                                    onChange={e => setValor(e.target.value)}
-                                    required // Torna o campo obrigatório
-                                />
+                                <input type="text" placeholder="Valor" value={valor} onChange={e => setValor(e.target.value)} required />
                             </div>
                             <div className={getInputGridClass()}>
                                 {events.map((event, index) => (
@@ -162,7 +156,7 @@ export const BingocardcreatePage = () => {
                                     </div>
                                 ))}
                             </div>
-                            <button className="button_create_card" type="submit">
+                            <button className="btn btn-primary button_create_card" type="submit">
                                 Adicionar Cartão de Bingo
                             </button>
                         </form>
@@ -175,10 +169,10 @@ export const BingocardcreatePage = () => {
                 </div>
             )}
             <div className="container">
-                <button className="button_back_createcard" onClick={handleClickCreateBingo}>
+                <button className="btn btn-primary button_back_createcard" onClick={handleClickCreateBingo}>
                     Voltar
                 </button>
             </div>
-        </>
+        </div>
     );
 };

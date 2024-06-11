@@ -80,7 +80,7 @@ export const NavBar = () => {
                 </div>
                 <ul className="nav justify-content-center">
                     <li className="nav-item" style={{ marginRight: '40px', fontSize: '20px' }}>
-                        <>Olá {name}!</>
+                        <>Bem-vindo {name}!</>
                     </li>
                     <li className="nav-item">
                         <img src="images/credits.png" alt="" style={{ width: '35px', height: '35px' }} /> {credits}

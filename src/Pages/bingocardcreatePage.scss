@@ -4,6 +4,11 @@
     //margin-bottom: 10px;
 }
 
+.bingocardcreatepage-class{
+    background-color: #a3a1a1;
+    height: 100000000000000%;
+}
+
 .select_gridsize{
     display: flex;
     margin-top: 20px;
@@ -46,10 +51,11 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
-.button_back_createcard {
+.button_back_createcard{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 5px;
 }
 
 .card-value-create {
@@ -57,4 +63,46 @@
     justify-content: space-between;
     align-items: center;
     padding-top: 20px;
+}
+
+@media (max-width: 2560px) {
+    .button-back-create-card{
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 1440px) {
+    .button-back-create-card{
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .button_back_createcard{
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .button_back_createcard{
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 425px) {
+    .button_back_createcard{
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 375px) {
+    .button_back_createcard{
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    .button-back-createcard{
+        font-size: 10px;
+    }
 }

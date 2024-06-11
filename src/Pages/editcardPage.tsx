@@ -138,7 +138,7 @@ export const EditCardPage = () => {
     };
 
     return (
-        <>
+        <div className="editcard-page">
             <NavBar />
             <div className="edit-card-container">
                 <div className="card card-spacing text-center">
@@ -156,12 +156,14 @@ export const EditCardPage = () => {
                     </div>
                 </div>
             </div>
-            <button className="btn btn-primary mt-3" onClick={handleFinishCard}>
-                Finalizar Cartão
-            </button>
-            <button className="btn btn-primary mt-3" onClick={handleClickBack}>
-                Voltar
-            </button>
-        </>
+            <div className="edit-buttons-container">
+                <button className="btn btn-primary mt-3 endcard-button" onClick={handleFinishCard}>
+                    Finalizar Cartão
+                </button>
+                <button className="btn btn-primary mt-3 editback-button" onClick={handleClickBack}>
+                    Voltar
+                </button>
+            </div>
+        </div>
     );
 };
