@@ -37,28 +37,33 @@ export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3
         <div className="bingo-card">
             {card.map((row, rowIndex) => (
                 <div key={rowIndex} className="bingo-row">
-                    {row.map((cell, colIndex) => (
-                        <div key={colIndex} className="bingo-cell">
-                            <div className="bingo-event">{cell.event}</div>
-                            <div className="bingo-result">{cell.result}</div>
-                            {showCheckButtons && (
-                                <div className="check-buttons">
-                                    <button
-                                        className={`btn btn-success rounded-pill px-3 trueresult-button ${checks[rowIndex * cols + colIndex] ? 'checked' : ''}`}
-                                        onClick={() => handleCheckToggle(rowIndex * cols + colIndex, true)} // Passa true para o botão True
-                                    >
-                                        Certo
-                                    </button>
-                                    <button
-                                        className={`btn btn-danger rounded-pill px-3 falseresult-button ${!checks[rowIndex * cols + colIndex] ? 'checked' : ''}`}
-                                        onClick={() => handleCheckToggle(rowIndex * cols + colIndex, false)} // Passa false para o botão False
-                                    >
-                                        Errado
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                    {row.map((cell, colIndex) => {
+                        const isChecked = checks[rowIndex * cols + colIndex];
+                        const cellClass = isChecked === true ? 'cell-true' : isChecked === false ? 'cell-false' : '';
+
+                        return (
+                            <div key={colIndex} className={`bingo-cell ${cellClass}`}>
+                                <div className="bingo-event">{cell.event}</div>
+                                <div className="bingo-result">{cell.result}</div>
+                                {showCheckButtons && (
+                                    <div className="check-buttons">
+                                        <button
+                                            className={`btn btn-success rounded-pill px-3 trueresult-button ${isChecked ? 'checked' : ''}`}
+                                            onClick={() => handleCheckToggle(rowIndex * cols + colIndex, true)}
+                                        >
+                                            Certo
+                                        </button>
+                                        <button
+                                            className={`btn btn-danger rounded-pill px-3 falseresult-button ${isChecked === false ? 'checked' : ''}`}
+                                            onClick={() => handleCheckToggle(rowIndex * cols + colIndex, false)}
+                                        >
+                                            Errado
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             ))}
         </div>
