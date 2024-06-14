@@ -34,7 +34,6 @@
     padding-right: 180px;
 }
 
-/* Media queries para diferentes tamanhos de tela */
 @media (max-width: 2560px) {
     .logo {
         width: 480px;
@@ -48,7 +47,7 @@
         height: 28px;
     }
     .button-text {
-        font-size: 18px; /* Altere o tamanho conforme necessário */
+        font-size: 18px; 
     }
 }
 
@@ -65,7 +64,7 @@
         height: 28px;
     }
     .button-text {
-        font-size: 16px; /* Altere o tamanho conforme necessário */
+        font-size: 16px; 
     }
 }
 
@@ -83,7 +82,7 @@
         height: 28px;
     }
     .button-text {
-        font-size: 15px; /* Altere o tamanho conforme necessário */
+        font-size: 15px; 
     }
 }
 

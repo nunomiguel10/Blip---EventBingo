@@ -4,7 +4,7 @@
     font-size: 25px;
     height: 100000%;
     font-family: Arial;
-    overflow-x: auto; // Adiciona rolagem horizontal para tabelas largas em telas pequenas
+    overflow-x: auto;
 }
 
 .ranking-title {
@@ -16,21 +16,21 @@
 .table-ranking {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; // Garante que a tabela se ajuste ao container
+    table-layout: fixed;
 }
 
 .table-cell {
     padding: 10px;
 }
-/* Adiciona estilos adicionais para a tabela */
+
 .table-ranking th{
-    border: 1px solid #000; /* Adiciona borda às células para melhor visualização */
-    text-align: center; /* Alinha o texto à esquerda */
+    border: 1px solid #000; 
+    text-align: center; 
     word-wrap: break-word;
 }
 .table-ranking td {
-    border: 1px solid #000; /* Adiciona borda às células para melhor visualização */
-    text-align: left; /* Alinha o texto à esquerda */
+    border: 1px solid #000; 
+    text-align: left; 
     word-wrap: break-word;
 }
 
