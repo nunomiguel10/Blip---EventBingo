@@ -14,23 +14,23 @@ export const EditCardPage = () => {
     const location = useLocation();
     const { card } = location.state || {};
     const navigate = useNavigate();
-    const [checks, setChecks] = useState(card.checks || Array(card.gridSize.rows * card.gridSize.cols).fill(false));
+    const [eventFinalResult, setEventFinalResult] = useState(card.eventFinalResult || Array(card.gridSize.rows * card.gridSize.cols).fill(false));
 
     useEffect(() => {
-        const loadChecks = async () => {
+        const loadEventFinalResult = async () => {
             const cardRef = doc(db, 'BingoCards', card.id);
             const cardDoc = await cardRef.get();
 
             if (cardDoc.exists()) {
                 const data = cardDoc.data();
 
-                if (data.checks) {
-                    setChecks(data.checks);
+                if (data.eventFinalResult) {
+                    setEventFinalResult(data.eventFinalResult);
                 }
             }
         };
 
-        loadChecks();
+        loadEventFinalResult();
     }, [card.id]);
 
     const handleClickBack = () => {
@@ -38,17 +38,17 @@ export const EditCardPage = () => {
     };
 
     const handleCheckToggle = async (index, value) => {
-        const updatedChecks = [...checks];
+        const updatedeventFinalResult = [...eventFinalResult];
 
-        updatedChecks[index] = value;
-        setChecks(updatedChecks);
+        updatedeventFinalResult[index] = value;
+        setEventFinalResult(updatedeventFinalResult);
 
         const cardRef = doc(db, 'BingoCards', card.id);
 
         try {
-            await updateDoc(cardRef, { checks: updatedChecks });
+            await updateDoc(cardRef, { eventFinalResult: updatedeventFinalResult });
         } catch (error) {
-            console.error('Erro ao atualizar os checks no Firestore:', error);
+            console.error('Erro ao atualizar os eventFinalResult no Firestore:', error);
         }
     };
 
@@ -65,7 +65,7 @@ export const EditCardPage = () => {
             let isRowMarked = true;
 
             for (let j = 0; j < cellsPerRow; j++) {
-                if (!checks[i + j]) {
+                if (!eventFinalResult[i + j]) {
                     isRowMarked = false;
                     break;
                 }
@@ -147,7 +147,7 @@ export const EditCardPage = () => {
                             events={card.events}
                             results={card.results}
                             gridSize={card.gridSize}
-                            checks={checks}
+                            eventFinalResult={eventFinalResult}
                             onCheckToggle={handleCheckToggle}
                             showCheckButtons
                         />

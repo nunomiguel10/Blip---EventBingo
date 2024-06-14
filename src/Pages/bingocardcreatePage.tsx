@@ -19,7 +19,7 @@ export const BingocardcreatePage = () => {
     const [gridSize, setGridSize] = useState<{ rows: number; cols: number }>({ rows: 3, cols: 3 }); // Default to 3x3 grid
     const [events, setEvents] = useState<string[]>(Array(9).fill('')); // Default 9 empty events
     const [results, setResults] = useState<string[]>(Array(9).fill('')); // Default 9 empty results
-    const [checks, setChecks] = useState<boolean[]>(Array(9).fill('')); // Default 9 false checks
+    const [eventFinalResult, setEventFinalResult] = useState<boolean[]>(Array(9).fill('')); // Default 9 false eventFinalResult
 
     const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ export const BingocardcreatePage = () => {
         setGridSize({ rows, cols });
         setEvents(Array(rows * cols).fill(''));
         setResults(Array(rows * cols).fill(''));
-        setChecks(Array(rows * cols).fill('')); // Inicializar o array de booleanos
+        setEventFinalResult(Array(rows * cols).fill('')); // Inicializar o array de booleanos
     };
 
     const handleEventChange = (index: number, value: string) => {
@@ -87,9 +87,8 @@ export const BingocardcreatePage = () => {
             gridSize,
             results,
             isActive,
-            checks, // Adicionar o array de booleanos
-            createdAt: serverTimestamp(),
-            lastUpdate: serverTimestamp()
+            eventFinalResult, // Adicionar o array de booleanos
+            createdAt: serverTimestamp()
         };
 
         try {
@@ -98,7 +97,7 @@ export const BingocardcreatePage = () => {
             setValor('');
             setEvents(Array(gridSize.rows * gridSize.cols).fill(''));
             setResults(Array(gridSize.rows * gridSize.cols).fill(''));
-            setChecks(Array(gridSize.rows * gridSize.cols).fill('')); // Resetar o array de booleanos
+            setEventFinalResult(Array(gridSize.rows * gridSize.cols).fill('')); // Resetar o array de booleanos
             toast.success('Cartão criado com sucesso!');
             navigate('/userPage');
         } catch (error) {

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-//@ts-nocheck
-//import React from 'react';
+// @ts-nocheck
+// import React from 'react';
 
 import './Bingo.scss';
 
@@ -23,7 +23,7 @@ const generateBingoCard = (events, results, rows, cols) => {
     return card;
 };
 
-export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3 }, checks = [], onCheckToggle, showCheckButtons }) => {
+export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3 }, eventFinalResult = [], onCheckToggle, showCheckButtons }) => {
     const { rows, cols } = gridSize;
     const card = generateBingoCard(events, results, rows, cols);
 
@@ -38,7 +38,7 @@ export const Bingo = ({ events = [], results = [], gridSize = { rows: 3, cols: 3
             {card.map((row, rowIndex) => (
                 <div key={rowIndex} className="bingo-row">
                     {row.map((cell, colIndex) => {
-                        const isChecked = checks[rowIndex * cols + colIndex];
+                        const isChecked = eventFinalResult[rowIndex * cols + colIndex];
                         const cellClass = isChecked === true ? 'cell-true' : isChecked === false ? 'cell-false' : '';
 
                         return (
