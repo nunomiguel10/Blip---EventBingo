@@ -22,20 +22,20 @@ export const LoginPage = () => {
             if (result && result.user) {
                 const user = result.user;
 
-                // Referência ao documento do utilizador no Firestore
+                // Vai à base de dados buscar o campo do id aos documentos da coleção "Utilizador"
                 const userDocRef = doc(db, 'Utilizador', user.uid);
 
-                // Verifica se o documento do utilizador já existe
+                // Verifica se o existe algum documento com o mesmo id
                 const userDoc = await getDoc(userDocRef);
 
                 if (!userDoc.exists()) {
-                    // Cria um novo documento para o utilizador
+                    // Caso não exista nenhum documento ainda desse utlizador, cria um novo documento para o utilizador
                     await setDoc(userDocRef, {
                         uid: user.uid,
                         name: user.displayName,
                         email: user.email,
                         cartões: [],
-                        creditos: 50000,
+                        creditos: 5000,
                         role: 'Cliente'
                     });
                 }

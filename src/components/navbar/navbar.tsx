@@ -16,17 +16,18 @@ export const NavBar = () => {
 
         const fetchUserData = async (user: User | null) => {
             if (user) {
-                // Buscando créditos do usuário em tempo real
+                // Vai à base de dados buscar todos os documentos da coleção "Utilizador"
                 const userDocRef = doc(db, 'Utilizador', user.uid);
 
+                // Vai à base de dados buscar os créditos do utilizador
                 unsubscribeUserDoc = onSnapshot(userDocRef, userDoc => {
                     if (userDoc.exists()) {
                         setCredits(userDoc.data().creditos);
                     }
                 });
 
-                // Buscando nome do usuário no Firebase Authentication
-                setUserName(user.displayName || ''); // Nome do usuário se disponível, senão vazio
+                // Vai à base de dados buscar o nome do utilizador e caso não tenha nome aparece uma string vazia
+                setUserName(user.displayName || '');
             }
         };
 

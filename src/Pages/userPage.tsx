@@ -22,6 +22,7 @@ export const UserPage = () => {
     };
 
     useEffect(() => {
+        // Verifica na base de dados se o utilizador é um administrador
         const unsubscribeFromAuth = onAuthStateChanged(auth, user => {
             if (user) {
                 const userDocRef = doc(db, 'Utilizador', user.uid);
@@ -55,6 +56,7 @@ export const UserPage = () => {
     }, [auth]);
 
     useEffect(() => {
+        // Vai à base de dados buscar todos os documentos da coleção "BingoCards" e que tenham o campo isActive a true
         const collectionRef = collection(db, 'BingoCards');
         const queryToDataBase = query(collectionRef, where('isActive', '==', true));
 

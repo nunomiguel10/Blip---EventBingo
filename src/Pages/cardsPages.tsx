@@ -22,7 +22,7 @@ export const CardsPage = () => {
                 setIsLoading(true);
 
                 try {
-                    // Obtenha o documento do usuário
+                    // Vai buscar todos os documentos da coleção "Utilizador" à base de dados
                     const userDocRef = doc(db, 'Utilizador', user.uid);
                     const userDocSnap = await getDoc(userDocRef);
 
@@ -30,7 +30,7 @@ export const CardsPage = () => {
                         const userData = userDocSnap.data();
                         const cardIds = userData.cartões || [];
 
-                        // Obtenha os cartões de Bingo associados ao usuário
+                        // Filtra todos os cartões que o utilizador tem
                         const cardPromises = cardIds.map(async cardId => {
                             const cardDocRef = doc(db, 'BingoCards', cardId);
                             const cardDocSnap = await getDoc(cardDocRef);

@@ -15,24 +15,22 @@ export const RankingPage = () => {
         const fetchUsers = async () => {
             setIsLoading(true);
             try {
-                // Obtenha uma referência à coleção 'Utilizador'
+                // Vai à base de dados buscar todos os documentos que tenham na coleção "Utilizador"
                 const usersCollectionRef = collection(db, 'Utilizador');
 
-                // Use onSnapshot para escutar mudanças em tempo real na coleção
                 const unsubscribe = onSnapshot(usersCollectionRef, snapshot => {
                     const usersData = snapshot.docs.map(doc => ({
                         id: doc.id,
                         ...doc.data()
                     }));
 
-                    // Ordenar os utilizadores pelos créditos (assumindo que 'creditos' é um campo numérico)
+                    // Ordena os utilizadores pelos créditos do maior para o mais pequeno
                     usersData.sort((a, b) => b.creditos - a.creditos);
 
                     setUsers(usersData);
                     setIsLoading(false);
                 });
 
-                // Limpar a subscrição quando o componente for desmontado
                 return () => unsubscribe();
             } catch (error) {
                 console.error('Erro ao buscar os utilizadores:', error);

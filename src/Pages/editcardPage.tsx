@@ -17,6 +17,7 @@ export const EditCardPage = () => {
     const [eventFinalResult, setEventFinalResult] = useState(card.eventFinalResult || Array(card.gridSize.rows * card.gridSize.cols).fill(false));
 
     useEffect(() => {
+        // Vai à base de dados buscar os documentos da coleção "BingoCards"
         const loadEventFinalResult = async () => {
             const cardRef = doc(db, 'BingoCards', card.id);
             const cardDoc = await cardRef.get();
@@ -37,6 +38,7 @@ export const EditCardPage = () => {
         navigate('/userPage');
     };
 
+    // Função para atualizar o estado do resultado final
     const handleCheckToggle = async (index, value) => {
         const updatedeventFinalResult = [...eventFinalResult];
 
@@ -60,7 +62,7 @@ export const EditCardPage = () => {
 
         const markedRows = new Set();
 
-        // Verifica quais linhas estão marcadas
+        // Verifica quais as linhas que estão marcadas
         for (let i = 0; i < totalCells; i += cellsPerRow) {
             let isRowMarked = true;
 
@@ -79,16 +81,16 @@ export const EditCardPage = () => {
         let extraCredits = 0;
 
         if (markedRows.size === 1) {
-            // Se apenas uma linha estiver marcada, ganhe metade dos créditos do cartão
+            // Se apenas uma linha do cartão estiver marcada, ganha metade dos créditos do cartão
             extraCredits = card.valor / 2;
         } else if (markedRows.size === 2) {
-            // Se duas linhas estiverem marcadas, ganhe o valor do cartão
+            // Se duas linhas do cartão estiverem marcadas, ganha o valor do cartão
             extraCredits = parseFloat(card.valor);
         } else if (markedRows.size === rows) {
-            // Se mais de duas linhas estiverem marcadas e menos ou igual ao número total de linhas, ganhe 1,5 vezes o valor do cartão
+            // Se todas as linhas estiverem marcadas, ganha o valor do cartão * 3
             extraCredits = card.valor * 3;
         } else if (markedRows.size > 2 && markedRows.size <= rows) {
-            // Se todas as linhas estiverem marcadas, ganhe o valor do cartão * 3
+            // Se mais de duas linhas do cartão estiverem marcadas e se forem menos ou igual ao número total de linhas do cartão, ganha 1,5 vezes o valor do cartão
             extraCredits = card.valor * 1.5;
         }
 
@@ -97,7 +99,7 @@ export const EditCardPage = () => {
         try {
             await updateDoc(cardRef, { isActive: false });
 
-            // Atualiza os créditos para os usuários que possuem este cartão
+            // Atualiza os créditos para os utilizadores que compraram este cartão
             if (extraCredits > 0) {
                 const usersRef = collection(db, 'Utilizador');
                 const q = query(usersRef, where('cartões', 'array-contains', card.id));
@@ -108,18 +110,18 @@ export const EditCardPage = () => {
                         const userRef = doc(db, 'Utilizador', userDoc.id);
                         const userData = userDoc.data();
 
-                        // Verifica quantas cópias do cartão o usuário possui
+                        // Verifica quantas cópias do cartão o utilizador tem
                         const cardCopies = userData.cartões.filter(cardId => cardId === card.id).length;
 
-                        // Calcula os créditos extras com base no número de cópias do cartão
+                        // Calcula os créditos com base no número de cópias do cartão
                         const totalExtraCredits = extraCredits * cardCopies;
                         const existingCredits = parseFloat(userData.creditos) || 0; // Convertendo para número
 
-                        // Adiciona os créditos extras aos créditos existentes
+                        // Adiciona os créditos aos créditos do utilizador
                         const newCredits = parseFloat(existingCredits + totalExtraCredits);
 
                         try {
-                            await updateDoc(userRef, { creditos: newCredits.toString() }); // Convertendo de volta para string
+                            await updateDoc(userRef, { creditos: newCredits.toString() });
                         } catch (error) {
                             console.error('Erro ao atribuir créditos extras ao usuário:', userDoc.id, error);
                         }
@@ -129,7 +131,7 @@ export const EditCardPage = () => {
                 }
             }
 
-            // Sucesso: Mostra a notificação e navega de volta para a página do usuário
+            // Caso o cartão seja finalizado com sucesso, aparece uma notificaçã do toast de sucesso
             toast.success('Cartão finalizado com sucesso!');
             navigate('/userPage');
         } catch (error) {

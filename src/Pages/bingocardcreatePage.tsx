@@ -16,10 +16,10 @@ export const BingocardcreatePage = () => {
     const [valor, setValor] = useState<string>('');
     const [isCreatingANewCard, setIsCreatingANewCard] = useState<boolean>(false);
     const [isActive, setIsActive] = useState<boolean>(true);
-    const [gridSize, setGridSize] = useState<{ rows: number; cols: number }>({ rows: 3, cols: 3 }); // Default to 3x3 grid
-    const [events, setEvents] = useState<string[]>(Array(9).fill('')); // Default 9 empty events
-    const [results, setResults] = useState<string[]>(Array(9).fill('')); // Default 9 empty results
-    const [eventFinalResult, setEventFinalResult] = useState<boolean[]>(Array(9).fill('')); // Default 9 false eventFinalResult
+    const [gridSize, setGridSize] = useState<{ rows: number; cols: number }>({ rows: 3, cols: 3 });
+    const [events, setEvents] = useState<string[]>(Array(9).fill(''));
+    const [results, setResults] = useState<string[]>(Array(9).fill(''));
+    const [eventFinalResult, setEventFinalResult] = useState<boolean[]>(Array(9).fill(''));
 
     const navigate = useNavigate();
 
@@ -28,6 +28,7 @@ export const BingocardcreatePage = () => {
     };
 
     useEffect(() => {
+        // Vai à base de dados buscar todos os documentos que tem na coleção "BingoCards"
         const collectionRef = collection(db, 'BingoCards');
         const queryToDataBase = query(collectionRef);
 
@@ -47,13 +48,15 @@ export const BingocardcreatePage = () => {
         return () => unsub();
     }, []);
 
+    //Atualiza os estados do tamanho do novo cartão para que não interfira com a interface
     const handleGridSizeChange = (rows: number, cols: number) => {
         setGridSize({ rows, cols });
         setEvents(Array(rows * cols).fill(''));
         setResults(Array(rows * cols).fill(''));
-        setEventFinalResult(Array(rows * cols).fill('')); // Inicializar o array de booleanos
+        setEventFinalResult(Array(rows * cols).fill(''));
     };
 
+    //Atualiza o estado dos eventos, quando se cria um cartão novo
     const handleEventChange = (index: number, value: string) => {
         setEvents(prevEvents => {
             const newEvents = [...prevEvents];
@@ -64,6 +67,7 @@ export const BingocardcreatePage = () => {
         });
     };
 
+    //Atualiza o estado dos resultados, quando se cria um cartão novo
     const handleResultChange = (index: number, value: string) => {
         setResults(prevResults => {
             const newResults = [...prevResults];
@@ -76,18 +80,20 @@ export const BingocardcreatePage = () => {
 
     const addBingoCard = async event => {
         event.preventDefault();
+        // Obriga que o administrador coloque um valor no cartão para que o possa criar
         if (!valor) {
             alert('Por favor, preencha o campo "Valor".');
         }
-        const cardRef = doc(collection(db, 'BingoCards')); // Gera uma referência de documento com ID
+        const cardRef = doc(collection(db, 'BingoCards'));
+        // Cria um novo cartão com um id, valor, os eventos, o tamanho do cartão, resultados, um booleano para ver se está ativo ou se já acabou, o resultado final, e quando foi criado
         const newBingoCard = {
-            id: cardRef.id, // Adiciona o ID do documento ao objeto do cartão Bingo
+            id: cardRef.id,
             valor,
             events,
             gridSize,
             results,
             isActive,
-            eventFinalResult, // Adicionar o array de booleanos
+            eventFinalResult,
             createdAt: serverTimestamp()
         };
 
@@ -97,7 +103,7 @@ export const BingocardcreatePage = () => {
             setValor('');
             setEvents(Array(gridSize.rows * gridSize.cols).fill(''));
             setResults(Array(gridSize.rows * gridSize.cols).fill(''));
-            setEventFinalResult(Array(gridSize.rows * gridSize.cols).fill('')); // Resetar o array de booleanos
+            setEventFinalResult(Array(gridSize.rows * gridSize.cols).fill(''));
             toast.success('Cartão criado com sucesso!');
             navigate('/userPage');
         } catch (error) {

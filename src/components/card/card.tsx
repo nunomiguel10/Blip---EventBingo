@@ -49,30 +49,37 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
         };
     }, [auth]);
 
+    // Vai para a página de editar e leva o cartão como estado para modificar apenas esse cartão
     const handleEditClick = card => {
-        navigate('/editcard', { state: { card } }); // Pass card data via state
+        navigate('/editcard', { state: { card } });
     };
 
+    // Função que permite a compra do cartão
     const handleBuy = async card => {
         const user = auth.currentUser;
 
         if (user) {
             try {
+                // Vai à base de dados o id do cartão
                 const bingoCardDocRef = doc(db, 'BingoCards', card.id);
                 const bingoCardDocSnap = await getDoc(bingoCardDocRef);
 
+                // Caso o cartão exista
                 if (bingoCardDocSnap.exists()) {
+                    // Vai à base de dados buscar o id do utilizador
                     const userDocRef = doc(db, 'Utilizador', user.uid);
                     const userDocSnap = await getDoc(userDocRef);
 
+                    // Se o utilizador existir vai efetuar a compra do cartão
                     if (userDocSnap.exists()) {
                         const userCredits = userDocSnap.data().creditos || 0;
                         const currentCards = userDocSnap.data().cartões || [];
 
-                        // Ensure values are interpreted as numbers
+                        // Convertemos para número para ter a certeza que estamos a lidar com números
                         const userCreditsNumber = Number(userCredits);
                         const cardValueNumber = Number(card.valor);
 
+                        // Verifica se o utilizador tem créditos suficientes para comprar o cartão
                         if (userCreditsNumber >= cardValueNumber) {
                             const cardId = bingoCardDocRef.id;
                             const updatedCards = [...currentCards, cardId];
@@ -87,25 +94,25 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                                 position: 'top-center'
                             });
                         } else {
-                            console.error(`Créditos insuficientes: ${userCreditsNumber} < ${cardValueNumber}`);
                             toast.error('Créditos insuficientes para comprar o cartão.', {
                                 position: 'top-center'
                             });
                         }
                     } else {
-                        console.error('User document does not exist.');
+                        console.error('Documento não existe.');
                     }
                 } else {
-                    console.error('BingoCard não encontrado.');
+                    console.error('Cartão não encontrado.');
                 }
             } catch (error) {
                 console.error('Erro ao comprar o cartão:', error);
             }
         } else {
-            console.error('Nenhum usuário autenticado.');
+            console.error('Nenhum utilizador autenticado.');
         }
     };
 
+    // Função para remover os cartões do sistema
     const handleRemoveClick = async card => {
         try {
             const bingoCardDocRef = doc(db, 'BingoCards', card.id);
@@ -113,11 +120,11 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
             // Remove o cartão da coleção "BingoCards"
             await deleteDoc(bingoCardDocRef);
 
-            // Busca todos os usuários que compraram este cartão
+            // Vai à base de dados buscar todos os utilizadores que tinham comprado o cartão
             const usersQuery = query(collection(db, 'Utilizador'), where('cartões', 'array-contains', card.id));
             const usersSnapshot = await getDocs(usersQuery);
 
-            // Remove o ID do cartão da lista de cartões de cada usuário
+            // Remove o ID do cartão da lista de cartões de cada utilizador
             const updateUserPromises = usersSnapshot.docs.map(async userDoc => {
                 const userDocRef = doc(db, 'Utilizador', userDoc.id);
                 const userData = userDoc.data();
@@ -126,14 +133,12 @@ export const Card = ({ bingoCards, showBuyButton = true }) => {
                 await updateDoc(userDocRef, { cartões: updatedCards });
             });
 
-            // Espera todas as atualizações dos usuários serem concluídas
             await Promise.all(updateUserPromises);
 
             toast.success('Cartão removido com sucesso!', {
                 position: 'top-center'
             });
         } catch (error) {
-            console.error('Erro ao remover o cartão:', error);
             toast.error('Erro ao remover o cartão.', {
                 position: 'top-center'
             });
